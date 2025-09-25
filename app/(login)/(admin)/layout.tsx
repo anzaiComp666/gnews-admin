@@ -1,60 +1,41 @@
 "use client"
 
-import { PropsWithChildren, useState } from "react"
-import { Header } from "./header";
-import { ProSlidenav } from "@/app/_heroui/pro-slidenav";
+
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { PropsWithChildren } from "react"
+import { ProSidebar, ProSidebarGroup } from "@/pro-components/pro-sidebar"
+import { AppSidebarHeader } from "./sidebar-header"
+import { AppSidebarFooter } from "./sidebar-footer"
 
 export default (props: PropsWithChildren) => {
 
-    const slidenavs = [
+
+    const sidebarGroups: ProSidebarGroup[] = [
         {
-            pathname: "/",
-            title: "首页",
-        },
-        "首页管理",
-        // {
-        //     title: "闪月",
-        //     children: [
-        //         { title: "爬虫数据", pathname: "/platform/shanyue/data" },
-        //         { title: "爬虫任务", pathname: "/platform/shanyue/task" },
-        //         { title: "平台账号", pathname: "/platform/shanyue/account" },
-        //     ]
-        // },
-        // {
-        //     title: "文撩",
-        //     children: [
-        //         { title: "爬虫数据", pathname: "/platform/wenliao/data" },
-        //         { title: "爬虫任务", pathname: "/platform/wenliao/task" },
-        //         { title: "平台账号", pathname: "/platform/wenliao/account" },
-        //     ]
-        // },
-        // {
-        //     title: "Blued",
-        //     children: [
-        //         { title: "爬虫数据", pathname: "/platform/blued/data" },
-        //         { title: "爬虫任务", pathname: "/platform/blued/task" },
-        //         { title: "平台账号", pathname: "/platform/blued/account" },
-        //         { title: "站内信", pathname: "/chat/blued", target: "_blank" },
-        //     ]
-        // },
-        // "短链",
-        // { title: "短链管理", pathname: "/shortlink" },
+            title: "",
+            items: [
+                {
+                    title: "首页",
+                    pathname: "/",
+                },
+                {
+                    title: "主页管理",
+                    children: [
+                        { title: "首页轮播", pathname: "/home/banners" },
+                        { title: "首页标签", pathname: "/home/labels" },
+                    ]
+                }
+            ]
+        }
     ]
 
-    const [isMenuOpen, setIsMenuOpen] = useState(true);
-    const onMenuToggle = () => {
-        setIsMenuOpen(!isMenuOpen)
-    }
-
     return (
-        <div className="h-full flex flex-col">
-            <Header isMenuOpen={isMenuOpen} onMenuToggle={onMenuToggle} />
-            <div className="flex-1 flex overflow-hidden">
-                <ProSlidenav isOpen={isMenuOpen} items={slidenavs} />
-                <div className="flex-1 p-2 overflow-hidden">
-                    {props.children}
-                </div>
-            </div>
-        </div>
+        <ProSidebar
+            header={<AppSidebarHeader />}
+            groups={sidebarGroups}
+            footer={<AppSidebarFooter />}
+        >
+            {props.children}
+        </ProSidebar>
     )
 }

@@ -1,15 +1,13 @@
 import { PropsWithChildren } from "react"
+import { AuthActions } from "../actions/auth"
+import { redirect } from "next/navigation"
 
 export default async (props: PropsWithChildren) => {
+
+    const isLogin = await AuthActions.isLogin()
+    if (!isLogin) {
+        return redirect('/login')
+    }
+
     return props.children
-    // const cookieStore = await cookies()
-    // try {
-    //     await API.request('userInfo', undefined, {
-    //         token: cookieStore.get('token')?.value,
-    //     })
-    //     return props.children
-    // } catch (error) {
-    //     console.error("用户未登录或登录已过期", error)
-    //     redirect('/login')
-    // }
 }
