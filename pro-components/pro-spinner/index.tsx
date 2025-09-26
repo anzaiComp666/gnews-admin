@@ -1,13 +1,15 @@
 import { RefreshCw } from "lucide-react"
+import React from "react"
 
-interface Props {
-    children?: React.ReactNode
+interface Props extends React.ComponentProps<"div"> {
     isLoading?: boolean
 }
 
 export const ProSpinner = (props: Props) => {
+    const { isLoading, className, ...restProps } = props
+
     return (
-        <div className="relative">
+        <div className={`relative ${className}`} {...restProps} >
             {props.children}
             <div
                 className="absolute left-0 top-0 w-full h-full flex items-center justify-center z-50 aria-hidden:hidden pointer-events-none aria-hidden:pointer-events-auto bg-white/50"

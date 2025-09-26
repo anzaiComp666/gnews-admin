@@ -11,17 +11,13 @@ import { globalConfigs } from "@/lib/config";
 import { HashUtil } from "@/lib/hashutil";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { AuthJwtPayload } from "./jwt-payload";
-import z from "zod";
+import { LoginSchemaType, LoginSchema } from "./login-schema";
 
-const LoginSchema = z.object({
-    username: z.string().min(1, "用户名不能为空"),
-    password: z.string().min(1, "密码不能为空"),
-})
 
-export async function login(params: z.infer<typeof LoginSchema>) {
+
+export async function login(data: LoginSchemaType) {
     try {
-
-        const { username, password } = LoginSchema.parse(params)
+        const { username, password } = LoginSchema.parse(data)
 
         const user = await dataSources.admin.withDataSource(async (manager) => {
             const user = await manager.findOne(AdminUserEntity, {

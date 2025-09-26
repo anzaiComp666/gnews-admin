@@ -1,9 +1,15 @@
 "use client"
 
-import { BannerActions } from "@/app/actions/home/banner"
+import { BannerActions } from "@/app/actions/banner"
 import { BannerPosition, IBannerEntity } from "@/lib/dao/biz/banner"
+import { JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProTable } from "@/pro-components/pro-table"
+import { ProTableFilterVariant, ProTableFilterVariantKey } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
+import dayjs from "dayjs"
+import { Button } from "@/components/ui/button"
+import { ActionsRender } from "./columns/actions"
+import { BannerUpsertDialog } from "./upsert-dialog"
 
 export default () => {
 
@@ -11,30 +17,39 @@ export default () => {
         {
             header: "ID",
             accessorKey: "id",
-            footer: props => {
-                return (
-                    <input
-                        type="text"
-                        placeholder={`筛选 ${props.column.id}...`}
-                        // value={props.column.getFilterValue() ?? ''}
-                        onChange={e => props.column.setFilterValue(e.target.value)}
-                    />
-                )
-            },
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.numberInput
+            }
         },
         {
             header: "名称",
             accessorKey: "name",
-
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.input
+            }
         },
         {
             header: "图片",
             accessorKey: "imageURL",
-            filterFn: "equalsString",
-            footer: () => {
-                return "图片"
+            enableColumnFilter: false,
+            enableSorting: false,
+            cell: info => (
+                <img src={info.getValue() as string} className="w-32 h-16 object-cover" />
+            )
+        },
+        {
+            header: "状态",
+            accessorKey: "status",
+            cell: info => {
+                return info.getValue() === 'active' ? '激活' : '未激活'
             },
-            cell: info => <img src={info.getValue() as string} className="w-32 h-16 object-cover" />
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
+                [ProTableFilterVariantKey.filterSelectOptions]: [
+                    { label: '激活', value: 'active' },
+                    { label: '未激活', value: 'inactive' },
+                ]
+            }
         },
         {
             header: "排序",
@@ -42,18 +57,77 @@ export default () => {
             enableSorting: false,
             enableColumnFilter: false,
         },
+        {
+            header: "跳转类型",
+            accessorKey: "jumpType",
+            cell: info => JumpTypeOptions.find(item => item.value === info.getValue())?.label || info.getValue(),
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
+                [ProTableFilterVariantKey.filterSelectOptions]: JumpTypeOptions
+            }
+        },
+        {
+            header: "跳转数据",
+            accessorKey: "jumpData",
+            enableSorting: false,
+            enableColumnFilter: false,
+        },
+        {
+            header: "创建时间",
+            accessorKey: "createdAt",
+            cell: info => dayjs(info.getValue() as string).format("YYYY-MM-DD HH:mm:ss"),
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.dateRange
+            }
+        },
+        {
+            header: "更新时间",
+            accessorKey: "updatedAt",
+            enableSorting: false,
+            enableColumnFilter: false,
+            cell: info => dayjs(info.getValue() as string).format("YYYY-MM-DD HH:mm:ss")
+        },
+        {
+            header: "操作",
+            enableSorting: false,
+            enableColumnFilter: false,
+            cell: info => <ActionsRender info={info} />
+        }
     ]
 
 
 
-    const onRequest = async () => {
+    const onRequest = async (params: {
+        page: number,
+        pageSize: number
+        columnFilters: any
+        sorting: any
+    }) => {
+
+        console.log(params)
+
         const result = await BannerActions.getBanners(BannerPosition.home)
+        for (let index = 0; index < params.pageSize; index++) {
+            result.push(result[0])
+        }
+
         return {
             data: result,
-            total: result.length,
+            total: 100,
         }
     }
 
+    const header = (
+        <div className="flex justify-end">
+            <BannerUpsertDialog>
+                <Button>添加</Button>
+            </BannerUpsertDialog>
+        </div>
+    )
 
-    return <ProTable columns={columns} onRequest={onRequest} />
+    return <ProTable
+        header={header}
+        columns={columns}
+        onRequest={onRequest}
+    />
 }

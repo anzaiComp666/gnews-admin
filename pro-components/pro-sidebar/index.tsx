@@ -14,10 +14,10 @@ export interface ProSidebarGroup {
 
 export interface ProSidebarItem {
     title: string
+    hidden?: boolean
     pathname?: string
     children?: ProSidebarItem[]
 }
-
 
 
 export const ProSidebar = (props: {
@@ -31,22 +31,23 @@ export const ProSidebar = (props: {
     const pathname = usePathname()
 
     const breadcrumbs: { title: string, pathname: string }[] = []
-    groups.forEach(group => {
-        group.items.forEach(item => {
-            if (item.children) {
-                item.children.forEach(sub => {
-                    if (sub.pathname === pathname) {
-                        breadcrumbs.push({ title: item.title, pathname: item.pathname || "#" })
-                        breadcrumbs.push({ title: sub.title, pathname: sub.pathname || "#" })
-                    }
-                })
-            } else {
-                if (item.pathname === pathname) {
-                    breadcrumbs.push({ title: item.title, pathname: item.pathname || "#" })
-                }
+    const createBreadcrumbs = (items: ProSidebarItem[]): boolean => {
+        for (const item of items) {
+            if (item.pathname && item.pathname == pathname) {
+                breadcrumbs.push({ title: item.title, pathname: item.pathname ?? "#" })
+                return true
             }
-        })
-    })
+
+            if (item.children) {
+                if (createBreadcrumbs(item.children)) {
+                    breadcrumbs.unshift({ title: item.title, pathname: item.pathname ?? "#" })
+                    return true
+                }
+
+            }
+        }
+    }
+    createBreadcrumbs(props.groups.flatMap(g => g.items))
 
     const breadcrumbNavigation = useMemo(() => {
 
@@ -79,8 +80,8 @@ export const ProSidebar = (props: {
 
 
     return (
-        <SidebarProvider>
-            <Sidebar>
+        <SidebarProvider className="h-svh">
+            <Sidebar className="z-20">
                 {props.header && <SidebarHeader>{props.header}</SidebarHeader>}
                 <SidebarContent>
                     {groups.map(group => (<ProSidebarGroupRender key={group.title} group={group} />))}
@@ -94,7 +95,9 @@ export const ProSidebar = (props: {
                     <Separator orientation="vertical" className="mr-2 h-4" />
                     {breadcrumbNavigation}
                 </header>
-                {props.children}
+                <div className="flex-1 p-2 overflow-hidden">
+                    {props.children}
+                </div>
             </SidebarInset>
         </SidebarProvider>
     )
@@ -135,7 +138,10 @@ const ProSidebarMenuItemRender = (props: {
 
     const pathname = usePathname()
     const { item } = props
-    if (item.children) {
+    const children = item.children?.filter(i => !i.hidden) || []
+
+
+    if (children.length > 0) {
         return (
             <Collapsible key={item.title} asChild className="group/collapsible">
                 <SidebarMenuItem>
@@ -148,15 +154,7 @@ const ProSidebarMenuItemRender = (props: {
                     <CollapsibleContent>
                         <SidebarMenuSub>
                             {item.children.map(sub => {
-                                return (
-                                    <SidebarMenuSubItem key={sub.pathname}>
-                                        <SidebarMenuButton asChild isActive={pathname === sub.pathname}>
-                                            <Link href={sub.pathname!}>
-                                                {sub.title}
-                                            </Link>
-                                        </SidebarMenuButton>
-                                    </SidebarMenuSubItem>
-                                )
+                                return <ProSidebarMenuItemRender key={sub.title} item={sub} />
                             })}
                         </SidebarMenuSub>
                     </CollapsibleContent>
@@ -167,7 +165,7 @@ const ProSidebarMenuItemRender = (props: {
     } else {
         return (
             <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname === item.pathname}>
+                <SidebarMenuButton asChild isActive={pathname == "/" ? item.pathname == pathname : pathname.includes(item.pathname) && item.pathname != "/"}>
                     <Link href={item.pathname!}>
                         {item.title}
                     </Link>

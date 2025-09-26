@@ -1,22 +1,21 @@
-// import { ProModal } from "@/app/_heroui/pro-modal"
-// import { BannerEntity, IBannerEntity } from "@/lib/dao/biz/banner"
-// import { Button, ButtonGroup } from "@heroui/react"
-// import { BannerUpsertModalContent } from "../upsert-modal"
+import { Button } from "@/components/ui/button"
+import { IBannerEntity } from "@/lib/dao/biz/banner"
+import { CellContext } from "@tanstack/react-table"
+import { BannerUpsertDialog } from "../upsert-dialog"
 
-// interface Props {
-//     data: IBannerEntity
-// }
+interface Props {
+    info: CellContext<IBannerEntity, unknown>
+}
 
-// export const ActionsRender = (props: Props) => {
+export const ActionsRender = (props: Props) => {
+    return (
+        <div className="flex space-x-2">
+            <BannerUpsertDialog entity={props.info.row.original}>
+                <Button variant="outline" size="sm">编辑</Button>
+            </BannerUpsertDialog>
 
-//     return (
-//         <ButtonGroup size="sm">
-//             <ProModal trigger={onOpen => <Button color="primary" onPress={onOpen}>编辑</Button>}>
-//                 <BannerUpsertModalContent entity={props.data} />
-//             </ProModal>
+            <Button variant="destructive" size="sm">删除</Button>
+        </div>
+    )
 
-//             <Button color="danger">删除</Button>
-//         </ButtonGroup>
-//     )
-
-// }
+}

@@ -1,10 +1,8 @@
 "use client"
 
 
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { PropsWithChildren } from "react"
 import { ProSidebar, ProSidebarGroup } from "@/pro-components/pro-sidebar"
-import { AppSidebarHeader } from "./sidebar-header"
 import { AppSidebarFooter } from "./sidebar-footer"
 
 export default (props: PropsWithChildren) => {
@@ -12,7 +10,7 @@ export default (props: PropsWithChildren) => {
 
     const sidebarGroups: ProSidebarGroup[] = [
         {
-            title: "",
+            title: "GNews",
             items: [
                 {
                     title: "首页",
@@ -21,8 +19,21 @@ export default (props: PropsWithChildren) => {
                 {
                     title: "主页管理",
                     children: [
-                        { title: "首页轮播", pathname: "/home/banners" },
-                        { title: "首页标签", pathname: "/home/labels" },
+                        {
+                            title: "首页轮播",
+                            pathname: "/home/banners",
+                            children: [
+                                {
+                                    title: "添加轮播",
+                                    hidden: true,
+                                    pathname: "/home/banners/add"
+                                },
+                            ]
+                        },
+                        {
+                            title: "首页标签",
+                            pathname: "/home/labels"
+                        },
                     ]
                 }
             ]
@@ -31,7 +42,6 @@ export default (props: PropsWithChildren) => {
 
     return (
         <ProSidebar
-            header={<AppSidebarHeader />}
             groups={sidebarGroups}
             footer={<AppSidebarFooter />}
         >

@@ -5,12 +5,11 @@ export enum JumpType {
   video = 2, // 视频
 }
 
-// 跳转类型对应的中文标签
-export const JumpTypeLabels: Record<JumpType, string> = {
-  [JumpType.none]: '无',
-  [JumpType.videoLabel]: '视频标签',
-  [JumpType.video]: '视频',
-};
+export const JumpTypeOptions = [
+  { label: '无', value: JumpType.none },
+  { label: '视频标签', value: JumpType.videoLabel },
+  { label: '视频', value: JumpType.video },
+];
 
 
 // 视频标签： jumpData = 标签ID

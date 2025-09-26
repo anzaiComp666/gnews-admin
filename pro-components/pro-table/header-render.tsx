@@ -1,6 +1,7 @@
 import { TableHead } from "@/components/ui/table"
 import { flexRender, Header } from "@tanstack/react-table"
-import { ArrowDown, ArrowUp } from "lucide-react"
+import { ChevronDown, ChevronUp } from "lucide-react"
+
 
 interface Props<T> {
     header: Header<T, unknown>
@@ -8,33 +9,29 @@ interface Props<T> {
 
 export const ProTableHeaderRender = <T,>(props: Props<T>) => {
     const { header } = props
-    // {...{
-    //                     className: header.column.getCanSort()
-    //                         ? 'cursor-pointer select-none'
-    //                         : '',
-    //                     onClick: header.column.getToggleSortingHandler(),
-    //                 }}
 
     const onClick = (event: any) => {
-        console.log("onClick", header.column.getCanSort())
         header.column.getToggleSortingHandler()(event)
     }
+
     return (
-        <TableHead colSpan={header.colSpan} key={header.id}>
+        <TableHead className="sticky top-0 z-10 bg-gray-200" colSpan={header.colSpan} key={header.id}>
             {header.isPlaceholder ? null : (
-                <div
-                    className="flex items-center gap-2 data-[sortable=false]:cursor-not-allowed data-sortable:cursor-pointer"
-                    data-sortable={header.column.getCanSort()}
-                    onClick={onClick}
-                >
-                    {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                    )}
-                    {{
-                        asc: <ArrowUp />,
-                        desc: <ArrowDown />,
-                    }[header.column.getIsSorted() as string] ?? null}
+                <div className="flex flex-col px-2">
+                    <div
+                        className="flex items-center gap-2 data-[sortable=false]:cursor-not-allowed data-sortable:cursor-pointer text-sm"
+                        data-sortable={header.column.getCanSort()}
+                        onClick={onClick}
+                    >
+                        {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                        )}
+                        {{
+                            asc: <ChevronUp />,
+                            desc: <ChevronDown />,
+                        }[header.column.getIsSorted() as string] ?? null}
+                    </div>
                 </div>
             )}
         </TableHead>
