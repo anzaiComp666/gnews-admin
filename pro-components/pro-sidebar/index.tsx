@@ -46,6 +46,7 @@ export const ProSidebar = (props: {
 
             }
         }
+        return false
     }
     createBreadcrumbs(props.groups.flatMap(g => g.items))
 
@@ -153,7 +154,7 @@ const ProSidebarMenuItemRender = (props: {
                     </CollapsibleTrigger>
                     <CollapsibleContent>
                         <SidebarMenuSub>
-                            {item.children.map(sub => {
+                            {children.map(sub => {
                                 return <ProSidebarMenuItemRender key={sub.title} item={sub} />
                             })}
                         </SidebarMenuSub>
@@ -165,7 +166,7 @@ const ProSidebarMenuItemRender = (props: {
     } else {
         return (
             <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname == "/" ? item.pathname == pathname : pathname.includes(item.pathname) && item.pathname != "/"}>
+                <SidebarMenuButton asChild isActive={pathname == "/" ? item.pathname == pathname : pathname.includes(item.pathname ?? "") && item.pathname != "/"}>
                     <Link href={item.pathname!}>
                         {item.title}
                     </Link>

@@ -36,6 +36,7 @@ export function ProDatePicker(props: Props) {
             <PopoverContent className="w-auto overflow-hidden p-0" align="start">
                 <Calendar
                     mode="range"
+                    required={true}
                     selected={value}
                     captionLayout="dropdown"
                     onSelect={onChange}

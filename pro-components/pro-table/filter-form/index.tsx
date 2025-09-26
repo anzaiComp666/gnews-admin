@@ -29,7 +29,7 @@ export const ProTableFilterForm = (props: Props) => {
     const { control, register, handleSubmit, reset } = useForm();
 
     const renderFieldComponent = (column: Column<any, unknown>) => {
-        const meta = column.columnDef.meta ?? {}
+        const meta = (column.columnDef.meta ?? {}) as Record<string, any>
 
         const variant = meta[ProTableFilterVariantKey.filterVariant] as ProTableFilterVariant
         switch (variant) {
@@ -94,7 +94,7 @@ export const ProTableFilterForm = (props: Props) => {
                 <div className="flex flex-wrap gap-2">
                     {columns.map((column) => (
                         <div key={column.id} className="flex items-center gap-1">
-                            <span className="whitespace-nowrap text-sm font-medium">{column.columnDef.header.toString()}</span>
+                            <span className="whitespace-nowrap text-sm font-medium">{column.columnDef.header?.toString()}</span>
                             {renderFieldComponent(column)}
                         </div>
                     ))}

@@ -5,8 +5,6 @@ import { ProButton } from "../pro-button"
 import { ProForm, ProFormFieldProps, ProFormFieldsRender } from "../pro-form"
 
 
-
-
 interface Props<T> {
     trigger: React.ReactNode
     header?: React.ReactNode

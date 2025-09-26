@@ -11,7 +11,7 @@ export const ProTableHeaderRender = <T,>(props: Props<T>) => {
     const { header } = props
 
     const onClick = (event: any) => {
-        header.column.getToggleSortingHandler()(event)
+        header.column.getToggleSortingHandler()?.(event)
     }
 
     return (

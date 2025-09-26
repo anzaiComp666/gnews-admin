@@ -8,7 +8,9 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "strict": false,
+    "strict": true,
+    // 关闭严格的属性初始化检查 typeorm使用了很多延迟初始化的属性
+    "strictPropertyInitialization": false,
     "noEmit": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

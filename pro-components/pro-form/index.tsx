@@ -1,13 +1,10 @@
 import { ControllerRenderProps, useForm, UseFormReturn } from "react-hook-form";
-import { ProFormFieldInput, ProFormFieldInputProps } from "./input"
+import { ProFormFieldInput, ProFormFieldInputProps } from "./fields/input"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import React from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
-interface ProFormCommonProps {
-    label?: string
-}
+import { Alert, AlertTitle } from "@/components/ui/alert";
+import { ProFormCommonProps } from "./fields/common";
 
 export type ProFormFieldProps = ProFormCommonProps & ProFormFieldInputProps
 
@@ -26,9 +23,9 @@ export const ProForm = <T,>(props: Props<T>) => {
 
     const { schema, fields, children } = props
 
-    const defaultValues = {};
+    const defaultValues: Record<string, any> = {};
     for (const key of Object.keys(fields)) {
-        defaultValues[key] = fields[key].defaultValue;
+        defaultValues[key] = fields[key as keyof T].defaultValue;
     }
 
 
@@ -37,9 +34,9 @@ export const ProForm = <T,>(props: Props<T>) => {
         defaultValues: defaultValues,
     })
 
-    const onSubmit = async (data: T) => {
+    const onSubmit = async (data: Record<string, any>) => {
         if (props.onSubmit) {
-            await props.onSubmit(data, form)
+            await props.onSubmit(data as T, form)
         }
     }
 
