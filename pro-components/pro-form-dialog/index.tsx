@@ -17,6 +17,7 @@ export const ProFormDialog = <T,>(props: Props<T>) => {
 
     const [isOpen, setIsOpen] = useState(false)
     const [isSubmiting, setIsSubmitting] = useState(false)
+
     const renderHeader = () => {
         if (typeof props.header === 'string') {
             return (
@@ -25,6 +26,7 @@ export const ProFormDialog = <T,>(props: Props<T>) => {
                 </DialogTitle>
             )
         }
+
         return props.header
     }
 
@@ -32,6 +34,7 @@ export const ProFormDialog = <T,>(props: Props<T>) => {
         try {
             setIsSubmitting(true)
             await props.onSubmit(data)
+            setIsOpen(false)
         } catch (error) {
 
         } finally {
@@ -50,40 +53,40 @@ export const ProFormDialog = <T,>(props: Props<T>) => {
             <DialogTrigger asChild>
                 {props.trigger}
             </DialogTrigger>
-            <DialogContent showCloseButton={!isSubmiting}>
-                <ProForm<T>
-                    schema={props.schema}
-                    fields={props.fields}
-                    onSubmit={onSubmit}
-                    form={{
-                        classname: "flex flex-col gap-4"
-                    }}
-                >
+            {isOpen && (
+                <DialogContent showCloseButton={!isSubmiting}>
+                    <ProForm<T>
+                        schema={props.schema}
+                        fields={props.fields}
+                        onSubmit={onSubmit}
+                        form={{
+                            classname: "flex flex-col gap-4"
+                        }}
+                    >
 
-                    <DialogHeader>
-                        {renderHeader()}
-                    </DialogHeader>
+                        <DialogHeader>
+                            {renderHeader()}
+                        </DialogHeader>
 
-                    <ProFormFieldsRender className="flex flex-col gap-4" />
+                        <ProFormFieldsRender className="flex flex-col gap-4" />
 
-                    <DialogFooter>
-                        <DialogClose asChild>
-                            <Button variant="outline" disabled={isSubmiting}>取消</Button>
-                        </DialogClose>
+                        <DialogFooter>
+                            <DialogClose asChild>
+                                <Button variant="outline" disabled={isSubmiting}>取消</Button>
+                            </DialogClose>
 
-                        <ProButton
-                            type="submit"
-                            isLoading={isSubmiting}
-                            disabled={isSubmiting}
-                        >
-                            提交
-                        </ProButton>
-                    </DialogFooter>
+                            <ProButton
+                                type="submit"
+                                isLoading={isSubmiting}
+                                disabled={isSubmiting}
+                            >
+                                提交
+                            </ProButton>
+                        </DialogFooter>
 
-                </ProForm>
-
-            </DialogContent>
-
+                    </ProForm>
+                </DialogContent>
+            )}
         </Dialog>
     )
 }

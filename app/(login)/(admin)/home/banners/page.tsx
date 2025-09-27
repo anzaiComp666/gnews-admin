@@ -1,15 +1,18 @@
 "use client"
 
-import { BannerPosition, IBannerEntity } from "@/lib/dao/biz/banner"
+import { IBannerEntity } from "@/lib/dao/biz/banner"
 import { JumpTypeOptions } from "@/lib/types/jump-type"
-import { ProTable } from "@/pro-components/pro-table"
+import { ProTable, ProTableRef } from "@/pro-components/pro-table"
 import { ProTableFilterVariant, ProTableFilterVariantKey } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
-import dayjs from "dayjs"
 import { Button } from "@/components/ui/button"
 import { ActionsRender } from "./columns/actions"
 import { BannerUpsertDialog } from "./upsert-dialog"
 import { bannerList } from "@/app/actions/banner/list"
+import { useRef } from "react"
+import { StatusRender } from "./columns/status"
+import { PositionRender } from "./columns/position"
+import { TableDateCellRender } from "@/components/table-cell-render/date"
 
 export default () => {
 
@@ -40,14 +43,23 @@ export default () => {
         {
             header: "状态",
             accessorKey: "status",
-            cell: info => {
-                return info.getValue() === 'active' ? '激活' : '未激活'
-            },
+            cell: info => <StatusRender info={info} />,
             meta: {
                 [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
                 [ProTableFilterVariantKey.filterSelectOptions]: [
                     { label: '激活', value: 'active' },
                     { label: '未激活', value: 'inactive' },
+                ]
+            }
+        },
+        {
+            header: "位置",
+            accessorKey: "position",
+            cell: info => <PositionRender info={info} />,
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
+                [ProTableFilterVariantKey.filterSelectOptions]: [
+                    { label: '首页', value: 'home' },
                 ]
             }
         },
@@ -75,7 +87,7 @@ export default () => {
         {
             header: "创建时间",
             accessorKey: "createdAt",
-            cell: info => dayjs(info.getValue() as string).format("YYYY-MM-DD HH:mm:ss"),
+            cell: info => <TableDateCellRender value={info.getValue()} />,
             meta: {
                 [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.dateRange
             }
@@ -85,7 +97,7 @@ export default () => {
             accessorKey: "updatedAt",
             enableSorting: false,
             enableColumnFilter: false,
-            cell: info => dayjs(info.getValue() as string).format("YYYY-MM-DD HH:mm:ss")
+            cell: info => <TableDateCellRender value={info.getValue()} />
         },
         {
             header: "操作",
@@ -103,24 +115,28 @@ export default () => {
         columnFilters: any
         sorting: any
     }) => {
-        const result = await bannerList(BannerPosition.home)
+        const { data, total } = await bannerList(params)
         return {
-            data: result,
-            total: result.length,
+            data: data,
+            total: total,
         }
     }
 
+    const tableRef = useRef<ProTableRef>(null)
     const header = (
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-2">
             <BannerUpsertDialog>
                 <Button>添加</Button>
             </BannerUpsertDialog>
+            <Button onClick={() => tableRef?.current?.refresh()} variant="outline">刷新</Button>
         </div>
     )
 
-    return <ProTable
+    return <ProTable<IBannerEntity>
+        ref={tableRef}
         header={header}
         columns={columns}
+        defaultSorting={[{ id: 'orderNo', desc: true }]}
         onRequest={onRequest}
     />
 }
