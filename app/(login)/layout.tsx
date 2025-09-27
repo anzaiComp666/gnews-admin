@@ -1,13 +1,15 @@
 import { PropsWithChildren } from "react"
-import { AuthActions } from "../actions/auth"
 import { redirect } from "next/navigation"
+import { authVerify } from "../actions/auth/verify"
+
 
 export default async (props: PropsWithChildren) => {
 
-    const isLogin = await AuthActions.isLogin()
-    if (!isLogin) {
-        return redirect('/login')
+    try {
+        const payload = await authVerify()
+        console.log(payload)
+        return props.children
+    } catch (error) {
+        redirect('/login')
     }
-
-    return props.children
 }

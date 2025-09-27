@@ -1,4 +1,5 @@
-import { BannerUpsertParams, BannerUpsertSchema } from "@/app/actions/banner/banner-upsert"
+import { bannerUpsert } from "@/app/actions/banner/upsert"
+import { BannerUpsertParams, BannerUpsertSchema } from "@/app/actions/banner/upsert-schema"
 import { BannerStatus, IBannerEntity } from "@/lib/dao/biz/banner"
 import { JumpType, JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProFormDialog } from "@/pro-components/pro-form-dialog"
@@ -10,7 +11,8 @@ interface Props {
 export const BannerUpsertDialog = (props: Props) => {
 
     const onSubmit = async (data: Record<string, any>) => {
-        console.log(data)
+        await bannerUpsert(data as BannerUpsertParams)
+
     }
 
     return (

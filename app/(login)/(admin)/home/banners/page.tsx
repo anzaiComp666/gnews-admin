@@ -1,6 +1,5 @@
 "use client"
 
-import { BannerActions } from "@/app/actions/banner"
 import { BannerPosition, IBannerEntity } from "@/lib/dao/biz/banner"
 import { JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProTable } from "@/pro-components/pro-table"
@@ -10,6 +9,7 @@ import dayjs from "dayjs"
 import { Button } from "@/components/ui/button"
 import { ActionsRender } from "./columns/actions"
 import { BannerUpsertDialog } from "./upsert-dialog"
+import { bannerList } from "@/app/actions/banner/list"
 
 export default () => {
 
@@ -103,17 +103,10 @@ export default () => {
         columnFilters: any
         sorting: any
     }) => {
-
-        console.log(params)
-
-        const result = await BannerActions.getBanners(BannerPosition.home)
-        for (let index = 0; index < params.pageSize; index++) {
-            result.push(result[0])
-        }
-
+        const result = await bannerList(BannerPosition.home)
         return {
             data: result,
-            total: 100,
+            total: result.length,
         }
     }
 

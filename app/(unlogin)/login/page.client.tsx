@@ -3,24 +3,25 @@
 import { useTransition } from "react";
 import { ProButton } from "@/pro-components/pro-button";
 import { ProForm, ProFormFieldsRender } from "@/pro-components/pro-form";
-import { LoginSchemaType, LoginSchema } from "@/app/actions/auth/login-schema";
 import { HashUtil } from "@/lib/hashutil";
-import { AuthActions } from "@/app/actions/auth";
 import { UseFormReturn } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
+import { AuthLoginSchema, AuthLoginSchemaType } from "@/app/actions/auth/login-schema";
+import { authLogin } from "@/app/actions/auth/login";
 
 
 export const LoginPage = () => {
     const [isPending, startTransition] = useTransition()
 
-    const onSubmit = async (values: LoginSchemaType, form: UseFormReturn) => {
+    const onSubmit = async (values: AuthLoginSchemaType, form: UseFormReturn) => {
         const password = values.password
         const passwordHash = await HashUtil.sha256(password);
 
         values.password = passwordHash;
         startTransition(async () => {
-            const result = await AuthActions.login(values);
+
+            const result = await authLogin(values);
             if (result.error) {
                 form.reset();
                 form.setError("root", {
@@ -34,7 +35,7 @@ export const LoginPage = () => {
 
     return (
         <div className="max-w-sm mx-auto mt-20">
-            <ProForm<LoginSchemaType>
+            <ProForm<AuthLoginSchemaType>
                 fields={{
                     username: {
                         type: 'input',
@@ -47,7 +48,7 @@ export const LoginPage = () => {
                         label: '密码'
                     },
                 }}
-                schema={LoginSchema}
+                schema={AuthLoginSchema}
                 onSubmit={onSubmit}
                 rootErrorRender={(message) => (
                     <Alert variant="destructive">

@@ -3,8 +3,7 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export const logout = async () => {
-
+export const authLogout = async () => {
     (await cookies()).delete("token")
     redirect("/login")
 }

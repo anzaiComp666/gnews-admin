@@ -6,18 +6,18 @@ import { UserError } from "@/lib/error/user";
 import { logger } from "@/lib/logger";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import jwt from 'jsonwebtoken';
-import { globalConfigs } from "@/lib/config";
 import { HashUtil } from "@/lib/hashutil";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
+import { AuthLoginSchemaType, AuthLoginSchema } from "./login-schema";
+import jsonwebtoken from 'jsonwebtoken';
 import { AuthJwtPayload } from "./jwt-payload";
-import { LoginSchemaType, LoginSchema } from "./login-schema";
+import { globalConfigs } from "@/lib/config";
 
 
 
-export async function login(data: LoginSchemaType) {
+export async function authLogin(data: AuthLoginSchemaType) {
     try {
-        const { username, password } = LoginSchema.parse(data)
+        const { username, password } = AuthLoginSchema.parse(data)
 
         const user = await dataSources.admin.withDataSource(async (manager) => {
             const user = await manager.findOne(AdminUserEntity, {
@@ -33,11 +33,11 @@ export async function login(data: LoginSchemaType) {
             return user
         })
 
-        const payload = {
+        const payload: AuthJwtPayload = {
             userId: user.id,
-        } as AuthJwtPayload
+        }
 
-        const token = jwt.sign(
+        const token = jsonwebtoken.sign(
             payload,
             globalConfigs.jwt.secret,
             { expiresIn: "3d" }

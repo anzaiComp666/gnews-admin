@@ -1,11 +1,11 @@
+import { authLogout } from "@/app/actions/auth/logout"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { LogOut } from "lucide-react"
-import { AuthActions } from "@/app/actions/auth"
 
 export const AppSidebarFooter = () => {
 
     const onExit = async () => {
-        await AuthActions.logout()
+        await authLogout()
     }
 
     return (
