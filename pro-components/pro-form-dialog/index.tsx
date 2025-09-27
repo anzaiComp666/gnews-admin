@@ -5,11 +5,11 @@ import { ProButton } from "../pro-button"
 import { ProForm, ProFormFieldProps, ProFormFieldsRender } from "../pro-form"
 
 
-interface Props<T> {
+interface Props<FormFields> {
     trigger: React.ReactNode
     header?: React.ReactNode
     onSubmit: (data: Record<string, any>) => Promise<void>
-    fields: Record<keyof T, ProFormFieldProps>
+    fields: Record<keyof FormFields, ProFormFieldProps>
     schema?: any
 }
 
@@ -87,48 +87,3 @@ export const ProFormDialog = <T,>(props: Props<T>) => {
         </Dialog>
     )
 }
-
-/*
-{form => (
-                <>
-                    <ProLabel title="名称" name="name">
-                        <Input {...form.register("name")} defaultValue={props.entity?.name} />
-                    </ProLabel>
-
-                    <ProLabel title="图片地址" name="imageURL">
-                        <Input {...form.register("imageUrl")} defaultValue={props.entity?.imageURL} />
-                    </ProLabel>
-
-                    <ProLabel title="状态" name="status">
-                        <Controller control={form.control} name="status" render={({ field }) => (
-                            <ProSelect
-                                {...field}
-                                onValueChange={field.onChange}
-                                placeholder="选择状态"
-                                defaultValue={props.entity?.status}
-                                options={[
-                                    { label: "启用", value: "enabled" },
-                                    { label: "禁用", value: "disabled" }
-                                ]}
-                            />
-                        )} />
-                    </ProLabel>
-
-                    <ProLabel title="跳转类型" name="jumpType">
-                        <Controller control={form.control} name="jumpType" render={({ field }) => (
-                            <ProSelect
-                                {...field}
-                                onValueChange={field.onChange}
-                                placeholder="选择跳转类型"
-                                defaultValue={props.entity?.jumpType}
-                                options={JumpTypeOptions}
-                            />
-                        )} />
-                    </ProLabel>
-
-                    <ProLabel title="跳转数据" name="jumpData">
-                        <Input {...form.register("jumpData")} defaultValue={props.entity?.jumpData} />
-                    </ProLabel>
-                </>
-            )}
-                */

@@ -1,5 +1,6 @@
 import { BannerUpsertParams, BannerUpsertSchema } from "@/app/actions/banner/banner-upsert"
-import { IBannerEntity } from "@/lib/dao/biz/banner"
+import { BannerStatus, IBannerEntity } from "@/lib/dao/biz/banner"
+import { JumpType, JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProFormDialog } from "@/pro-components/pro-form-dialog"
 
 interface Props {
@@ -20,33 +21,43 @@ export const BannerUpsertDialog = (props: Props) => {
             schema={BannerUpsertSchema}
             fields={{
                 id: {
-                    type: 'input',
-                    defaultValue: "",
+                    type: 'numberInput',
+                    defaultValue: props.entity?.id ?? 0,
+                    readonly: true,
+                    hidden: props.entity == null,
                     label: "ID"
                 },
                 name: {
                     type: 'input',
-                    defaultValue: "",
+                    defaultValue: props.entity?.name ?? "",
                     label: "名称"
                 },
                 imageUrl: {
                     type: 'input',
-                    defaultValue: props.entity?.imageURL || '',
+                    defaultValue: props.entity?.imageURL ?? "",
                     label: "图片链接"
                 },
                 status: {
-                    type: 'input',
-                    defaultValue: props.entity?.status || 'disabled',
-                    label: "状态"
+                    type: 'select',
+                    label: "状态",
+                    defaultValue: props.entity?.status ?? BannerStatus.active,
+                    placeholder: "请选择状态",
+                    options: [
+                        { label: '启用', value: BannerStatus.active },
+                        { label: '禁用', value: BannerStatus.inactive },
+                    ]
+
                 },
                 jumpType: {
-                    type: 'input',
-                    defaultValue: "",
-                    label: "跳转类型"
+                    type: 'select',
+                    defaultValue: props.entity?.jumpType ?? JumpType.none,
+                    label: "跳转类型",
+                    placeholder: "请选择跳转类型",
+                    options: JumpTypeOptions
                 },
                 jumpData: {
                     type: 'input',
-                    defaultValue: "",
+                    defaultValue: props.entity?.jumpData ?? "",
                     label: "跳转数据"
                 },
             }}

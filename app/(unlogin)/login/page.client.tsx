@@ -7,6 +7,8 @@ import { LoginSchemaType, LoginSchema } from "@/app/actions/auth/login-schema";
 import { HashUtil } from "@/lib/hashutil";
 import { AuthActions } from "@/app/actions/auth";
 import { UseFormReturn } from "react-hook-form";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Terminal } from "lucide-react";
 
 
 export const LoginPage = () => {
@@ -47,6 +49,13 @@ export const LoginPage = () => {
                 }}
                 schema={LoginSchema}
                 onSubmit={onSubmit}
+                rootErrorRender={(message) => (
+                    <Alert variant="destructive">
+                        <Terminal />
+                        <AlertTitle>登陆失败</AlertTitle>
+                        <AlertDescription>{message}</AlertDescription>
+                    </Alert>
+                )}
             >
                 <div className="flex flex-col gap-5">
                     <ProFormFieldsRender className="flex flex-col gap-5" />
