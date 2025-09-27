@@ -11,7 +11,6 @@ import { isDateRange } from "react-day-picker";
 
 export async function bannerList(data: TableListSchemaType) {
     await authVerify()
-    console.log(data)
     const params = TableListSchema.parse(data)
 
     const order: Record<string, "ASC" | "DESC"> = {}

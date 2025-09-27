@@ -76,12 +76,6 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
     const requestData = async () => {
         setIsLoading(true)
         try {
-            console.log("request data", {
-                page: pagination.pageIndex + 1,
-                pageSize: pagination.pageSize,
-                columnFilters,
-                sorting
-            })
             const response = await props.onRequest?.({
                 page: pagination.pageIndex + 1,
                 pageSize: pagination.pageSize,
@@ -159,7 +153,6 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
                         totalCount={table.getRowCount()}
                         pageSize={pagination.pageSize}
                         onPageSizeChange={(pageSize) => {
-                            console.log("pageSize change", pageSize)
                             table.setPageSize(pageSize)
                             savePageSize('pro-table-page-size', pageSize)
                         }}
