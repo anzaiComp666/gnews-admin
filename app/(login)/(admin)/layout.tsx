@@ -17,19 +17,12 @@ export default (props: PropsWithChildren) => {
                     pathname: "/",
                 },
                 {
+                    title: "轮播图管理",
+                    pathname: "/banner",
+                },
+                {
                     title: "主页管理",
                     children: [
-                        {
-                            title: "首页轮播",
-                            pathname: "/home/banners",
-                            children: [
-                                {
-                                    title: "添加轮播",
-                                    hidden: true,
-                                    pathname: "/home/banners/add"
-                                },
-                            ]
-                        },
                         {
                             title: "首页标签",
                             pathname: "/home/labels"
