@@ -12,6 +12,10 @@ export const ProFormFieldNumberInput = (props: ProFormFieldNumberInputProps & { 
     return (
         <ProNumberInput
             {...props.field}
+            onChange={(event) => {
+                const value = event.target.value
+                props.field.onChange(Number(value))
+            }}
             readOnly={props.readonly}
             placeholder={props.placeholder}
         />

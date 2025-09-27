@@ -57,12 +57,16 @@ export const BannerUpsertDialog = (props: Props) => {
                     ]
 
                 },
-                imageUrl: {
+                imageURL: {
                     type: 'input',
                     defaultValue: props.entity?.imageURL ?? "",
                     label: "图片链接"
                 },
-
+                orderNo: {
+                    type: 'numberInput',
+                    defaultValue: props.entity?.orderNo ?? 0,
+                    label: "排序"
+                },
                 jumpType: {
                     type: 'select',
                     defaultValue: props.entity?.jumpType ?? JumpType.none,
