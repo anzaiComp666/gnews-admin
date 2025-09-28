@@ -57,3 +57,7 @@ export class GappVideoLabelEntity extends BaseEntity {
   @Column({ nullable: true, comment: '标签背景图' })
   bgImageUrl?: string;
 }
+
+
+
+export type IGappVideoLabelEntity = InstanceType<typeof GappVideoLabelEntity>;

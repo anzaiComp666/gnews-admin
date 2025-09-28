@@ -137,6 +137,7 @@ export default () => {
 
     return <ProTable<IBannerEntity>
         ref={tableRef}
+        rowKey="id"
         header={header}
         columns={columns}
         defaultSorting={[{ id: 'orderNo', desc: true }]}

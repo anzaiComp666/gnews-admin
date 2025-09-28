@@ -1,7 +1,7 @@
 import { createContext, useContext } from "react";
 
 interface ProTableContextValue {
-    refresh: () => Promise<void>
+    refresh: () => Promise<void>,
 }
 
 export const ProTableContext = createContext<ProTableContextValue>({} as ProTableContextValue);

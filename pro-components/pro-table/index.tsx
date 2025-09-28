@@ -1,12 +1,13 @@
-import { Table, TableBody, TableCell, TableHeader, TableRow } from "@/components/ui/table"
-import { ColumnDef, ColumnFiltersState, flexRender, getCoreRowModel, PaginationState, SortingState, useReactTable } from "@tanstack/react-table"
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react"
+import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table"
+import { ColumnDef, ColumnFiltersState, getCoreRowModel, PaginationState, SortingState, useReactTable } from "@tanstack/react-table"
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react"
 import { ProSpinner } from "../pro-spinner"
 import { ProTableHeaderRender } from "./header-render"
 import { ProPagination } from "../pro-pagination"
 import { ProTableFilterForm } from "./filter-form"
 import { ProTableContext } from "./context"
-
+import { ProTableRow } from "./row"
+import { NoSSR } from "@/components/nossr"
 
 export interface ProTableRef {
     refresh: () => Promise<void>
@@ -15,6 +16,9 @@ export interface ProTableRef {
 interface Props<T> {
     // table instance ref
     ref?: React.Ref<ProTableRef>
+
+    // row key
+    rowKey?: string
 
     // header
     header?: React.ReactNode
@@ -39,21 +43,32 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
     const [isLoading, setIsLoading] = useState(false)
     const [data, setData] = useState<T[]>([])
     const [totalCount, setTotalCount] = useState(0)
+
+    // table state
     const [sorting, setSorting] = useState<SortingState>(props.defaultSorting ?? [])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
-        pageSize: 10,
+        pageSize: loadPageSize('pro-table-page-size'),
     })
-    const didInit = useRef(false)
 
     const table = useReactTable({
         data: data,
         columns: props.columns,
+        getRowId: (row, index) => {
+            if (props.rowKey) {
+                return (row as any)[props.rowKey]
+            } else {
+                return String(index)
+            }
+
+        },
+
         state: {
             sorting,
             columnFilters,
-            pagination
+            pagination,
         },
 
         getCoreRowModel: getCoreRowModel(),
@@ -66,13 +81,16 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
         manualFiltering: true,
         onColumnFiltersChange: setColumnFilters,
 
-
         manualPagination: true,
         onPaginationChange: setPagination,
         rowCount: totalCount,
+
+
+        debugTable: true,
+
     })
 
-
+    // - 请求数据
     const requestData = async () => {
         setIsLoading(true)
         try {
@@ -91,16 +109,13 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
         }
     }
 
-
+    // - 初始化和状态变化时请求数据
     useEffect(() => {
-        if (!didInit.current) {
-            table.setPageSize(loadPageSize('pro-table-page-size'))
-            didInit.current = true
-            return
-        }
         requestData()
     }, [sorting, columnFilters, pagination])
 
+
+    // - 暴露给父组件的方法
     useImperativeHandle(ref, () => {
         return {
             refresh: requestData
@@ -134,39 +149,37 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
                             </TableHeader>
                             <TableBody>
                                 {table.getRowModel().rows.map(row => (
-                                    <TableRow className={`border-none ${row.index % 2 == 0 ? "bg-muted/50" : ""}`} key={row.id}>
-                                        {row.getVisibleCells().map(cell => (
-                                            <TableCell key={cell.id}>
-                                                <div className="px-2">
-                                                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                                </div>
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
+                                    <ProTableRow
+                                        key={row.id}
+                                        row={row}
+                                    />
                                 ))}
                             </TableBody>
                         </Table>
                     </div>
 
 
-                    <ProPagination
-                        totalCount={table.getRowCount()}
-                        pageSize={pagination.pageSize}
-                        onPageSizeChange={(pageSize) => {
-                            table.setPageSize(pageSize)
-                            savePageSize('pro-table-page-size', pageSize)
-                        }}
+                    <NoSSR>
+                        <ProPagination
+                            totalCount={table.getRowCount()}
+                            pageSize={pagination.pageSize}
+                            onPageSizeChange={(pageSize) => {
+                                table.setPageSize(pageSize)
+                                savePageSize('pro-table-page-size', pageSize)
+                            }}
 
-                        page={pagination.pageIndex + 1}
-                        onPageChange={(page) => {
-                            table.setPageIndex(page - 1)
-                        }}
-                    />
+                            page={pagination.pageIndex + 1}
+                            onPageChange={(page) => {
+                                table.setPageIndex(page - 1)
+                            }}
+                        />
+                    </NoSSR>
                 </div>
             </ProSpinner>
         </ProTableContext.Provider>
     )
 }) as <T>(props: Props<T>) => React.ReactNode;
+
 
 
 const loadPageSize = (key: string): number => {

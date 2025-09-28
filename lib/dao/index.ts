@@ -69,6 +69,7 @@ class DataSourceContext {
 function initDataSources() {
     return {
         admin: new DataSourceContext('admin'),
+        video: new DataSourceContext('video'),
         app: {
             [GappId.toutiao]: new DataSourceContext('app_1'),
         } as { [key in GappId]: DataSourceContext },

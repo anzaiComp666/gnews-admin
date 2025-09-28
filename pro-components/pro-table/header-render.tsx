@@ -17,7 +17,7 @@ export const ProTableHeaderRender = <T,>(props: Props<T>) => {
     return (
         <TableHead className="sticky top-0 z-10 bg-gray-200" colSpan={header.colSpan} key={header.id}>
             {header.isPlaceholder ? null : (
-                <div className="flex flex-col px-2">
+                <div className="flex flex-col">
                     <div
                         className="flex items-center gap-2 data-[sortable=false]:cursor-not-allowed data-sortable:cursor-pointer text-sm"
                         data-sortable={header.column.getCanSort()}
