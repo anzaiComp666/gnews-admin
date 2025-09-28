@@ -13,7 +13,7 @@ import { StatusRender } from "./columns/status"
 import { PositionRender } from "./columns/position"
 import { TableDateCellRender } from "@/components/table-cell-render/date"
 import { ProImage } from "@/pro-components/pro-image"
-import { bannerList } from "@/app/actions/gnews/banner/list"
+import { bannerList } from "@/actions/gnews/banner/list"
 
 
 export default () => {

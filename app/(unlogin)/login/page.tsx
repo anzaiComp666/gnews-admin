@@ -1,4 +1,4 @@
-import { authVerify } from "@/app/actions/auth/verify";
+import { authVerify } from "@/actions/auth/verify";
 import { LoginPage } from "./page.client";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";

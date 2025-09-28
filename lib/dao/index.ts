@@ -2,6 +2,10 @@ import { DataSource, DataSourceOptions, EntityManager } from 'typeorm';
 import { globalConfigs } from '../config';
 import { AdminUserEntity } from './admin/admin-user';
 import { BannerEntity } from './biz/banner';
+import { GappVideoEntity } from './gapp/gapp_video.entity';
+import { GappVideoLabelEntity } from './gapp/gapp_video_label.entity';
+import { GappVideoLabelRelationEntity } from './gapp/gapp_video_label_relation.entity';
+import { GappVideoLabelParentEntity } from './gapp/gapp_video_label_parent.entity';
 const entities: { [key: string]: any[] } = {
     admin: [
         AdminUserEntity,
@@ -9,6 +13,12 @@ const entities: { [key: string]: any[] } = {
     biz: [
         BannerEntity,
     ],
+    gapp: [
+        GappVideoEntity,
+        GappVideoLabelEntity,
+        GappVideoLabelParentEntity,
+        GappVideoLabelRelationEntity,
+    ]
 };
 
 class DataSourceContext {

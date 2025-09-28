@@ -1,9 +1,9 @@
 "use server"
 
 import { dataSources } from "@/lib/dao"
-import { BannerEntity, BannerPosition } from "@/lib/dao/biz/banner"
-import { authVerify } from "../auth/verify"
+import { BannerEntity } from "@/lib/dao/biz/banner"
 import { BannerUpsertParams, BannerUpsertSchema } from "./upsert-schema"
+import { authVerify } from "@/actions/auth/verify"
 
 
 export const bannerUpsert = async (data: BannerUpsertParams) => {

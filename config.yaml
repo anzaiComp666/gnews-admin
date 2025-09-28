@@ -13,7 +13,15 @@ db:
     timezone: '+00:00'
     synchronize: false
 
-  # 视频数据库配置
+  gapp:
+    host: '127.0.0.1'
+    username: 'root'
+    password: '123456'
+    database: 'telemaster'
+    timezone: '+00:00'
+    synchronize: false
+
+  # 后台数据库配置
   admin:
     host: '127.0.0.1'
     username: 'root'

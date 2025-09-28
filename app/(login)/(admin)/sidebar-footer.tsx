@@ -1,4 +1,4 @@
-import { authLogout } from "@/app/actions/auth/logout"
+import { authLogout } from "@/actions/auth/logout"
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar"
 import { LogOut } from "lucide-react"
 

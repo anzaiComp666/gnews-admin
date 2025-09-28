@@ -1,6 +1,6 @@
 import { PropsWithChildren } from "react"
 import { redirect } from "next/navigation"
-import { authVerify } from "../actions/auth/verify"
+import { authVerify } from "../../actions/auth/verify"
 
 
 export default async (props: PropsWithChildren) => {

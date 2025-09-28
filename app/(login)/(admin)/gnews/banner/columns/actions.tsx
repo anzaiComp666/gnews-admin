@@ -3,11 +3,11 @@ import { IBannerEntity } from "@/lib/dao/biz/banner"
 import { CellContext } from "@tanstack/react-table"
 import { BannerUpsertDialog } from "../upsert-dialog"
 import { ProPopoverConfirm } from "@/pro-components/pro-popover-confirm"
-import { bannerDelete } from "@/app/actions/banner/delete"
 import { useProTable } from "@/pro-components/pro-table/context"
 import { useState } from "react"
 import { ProButton } from "@/pro-components/pro-button"
 import { ToastUtil } from "@/lib/toastutil"
+import { bannerDelete } from "@/actions/gnews/banner/delete"
 
 interface Props {
     info: CellContext<IBannerEntity, unknown>

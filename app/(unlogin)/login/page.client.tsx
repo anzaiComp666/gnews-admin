@@ -7,8 +7,8 @@ import { HashUtil } from "@/lib/hashutil";
 import { UseFormReturn } from "react-hook-form";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Terminal } from "lucide-react";
-import { AuthLoginSchema, AuthLoginSchemaType } from "@/app/actions/auth/login-schema";
-import { authLogin } from "@/app/actions/auth/login";
+import { AuthLoginSchema, AuthLoginSchemaType } from "@/actions/auth/login-schema";
+import { authLogin } from "@/actions/auth/login";
 
 
 export const LoginPage = () => {
