@@ -1,5 +1,5 @@
-import { bannerUpsert } from "@/actions/gnews/banner/upsert"
-import { BannerUpsertParams, BannerUpsertSchema } from "@/actions/gnews/banner/upsert-schema"
+import { bannerUpsert } from "@/actions/app/banner/upsert"
+import { BannerUpsertParams, BannerUpsertSchema } from "@/actions/app/banner/upsert-schema"
 import { BannerPosition, BannerStatus, IBannerEntity } from "@/lib/dao/app/banner"
 import { JumpType, JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProFormDialog } from "@/pro-components/pro-form-dialog"

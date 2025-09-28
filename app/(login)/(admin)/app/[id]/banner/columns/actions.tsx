@@ -7,7 +7,7 @@ import { useProTable } from "@/pro-components/pro-table/context"
 import { useState } from "react"
 import { ProButton } from "@/pro-components/pro-button"
 import { ToastUtil } from "@/lib/toastutil"
-import { bannerDelete } from "@/actions/gnews/banner/delete"
+import { bannerDelete } from "@/actions/app/banner/delete"
 import { useAppContext } from "../../context"
 
 interface Props {
