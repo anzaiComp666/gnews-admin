@@ -83,6 +83,13 @@ export const ProTableFilterForm = (props: Props) => {
         })
     }
 
+    const onReset = () => {
+        reset()
+        columns.forEach(column => {
+            column.setFilterValue(undefined)
+        })
+    }
+
 
     if (columns.length === 0) {
         return null
@@ -101,7 +108,7 @@ export const ProTableFilterForm = (props: Props) => {
                 </div>
                 <div className=" inline-flex items-center gap-2">
                     <ProButton type="submit" disabled={props.isPending}>搜索</ProButton>
-                    <ProButton type="reset" variant="outline" onClick={reset} disabled={props.isPending}>重置</ProButton>
+                    <ProButton type="reset" variant="outline" onClick={onReset} disabled={props.isPending}>重置</ProButton>
                 </div>
             </div>
         </form>

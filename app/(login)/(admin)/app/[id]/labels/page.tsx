@@ -1,11 +1,12 @@
 "use client"
 
-import { IGappVideoLabelEntity } from "@/lib/dao/video/gapp_video_label.entity"
+import { GappVideoLabelGroupType, GappVideoLabelGroupTypeTextMap, GappVideoLabelStatus, GappVideoLabelStatusTextMap, IGappVideoLabelEntity } from "@/lib/dao/video/gapp_video_label.entity"
 import { ProTableFilterVariant, ProTableFilterVariantKey } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAppContext } from "../context"
 import { labelList } from "@/actions/video/label/list"
 import { ProTable } from "@/pro-components/pro-table"
+import { enumToOptions } from "@/lib/enumutil"
 
 
 export default () => {
@@ -28,16 +29,28 @@ export default () => {
         {
             header: "标签名称",
             accessorKey: "labelName",
-            enableColumnFilter: false,
             enableSorting: false,
         },
         {
             header: "标签分组",
             accessorKey: "groupType",
+            cell: info => GappVideoLabelGroupTypeTextMap[info.getValue() as GappVideoLabelGroupType],
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
+                [ProTableFilterVariantKey.filterSelectOptions]: enumToOptions(GappVideoLabelGroupType, GappVideoLabelGroupTypeTextMap)
+            }
         },
         {
             header: "是否首页显示",
             accessorKey: "isHome",
+            cell: info => info.getValue() ? "是" : "否",
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
+                [ProTableFilterVariantKey.filterSelectOptions]: [
+                    { label: "是", value: 1 },
+                    { label: "否", value: 0 },
+                ]
+            }
         },
         {
             header: "排序",
@@ -47,6 +60,11 @@ export default () => {
         {
             header: "标签状态",
             accessorKey: "status",
+            cell: info => GappVideoLabelStatusTextMap[info.getValue() as GappVideoLabelStatus],
+            meta: {
+                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
+                [ProTableFilterVariantKey.filterSelectOptions]: enumToOptions(GappVideoLabelStatus, GappVideoLabelStatusTextMap)
+            }
         },
         {
             header: "标签背景图",
@@ -64,6 +82,7 @@ export default () => {
         columnFilters: any
         sorting: any
     }) => {
+        console.log(params)
         const { data, total } = await labelList(appContext.appId, params)
         return {
             data: data,
@@ -71,13 +90,6 @@ export default () => {
         }
     }
 
-    const onRequestExpanded = async (row: IGappVideoLabelEntity) => {
-
-        return [{
-            ...row,
-            id: 9999,
-        }] as IGappVideoLabelEntity[]
-    }
 
     // const tableRef = useRef<ProTableRef>(null)
     // const header = (

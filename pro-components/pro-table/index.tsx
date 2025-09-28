@@ -159,21 +159,19 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
                     </div>
 
 
-                    <NoSSR>
-                        <ProPagination
-                            totalCount={table.getRowCount()}
-                            pageSize={pagination.pageSize}
-                            onPageSizeChange={(pageSize) => {
-                                table.setPageSize(pageSize)
-                                savePageSize('pro-table-page-size', pageSize)
-                            }}
+                    <ProPagination
+                        totalCount={table.getRowCount()}
+                        pageSize={pagination.pageSize}
+                        onPageSizeChange={(pageSize) => {
+                            table.setPageSize(pageSize)
+                            savePageSize('pro-table-page-size', pageSize)
+                        }}
 
-                            page={pagination.pageIndex + 1}
-                            onPageChange={(page) => {
-                                table.setPageIndex(page - 1)
-                            }}
-                        />
-                    </NoSSR>
+                        page={pagination.pageIndex + 1}
+                        onPageChange={(page) => {
+                            table.setPageIndex(page - 1)
+                        }}
+                    />
                 </div>
             </ProSpinner>
         </ProTableContext.Provider>

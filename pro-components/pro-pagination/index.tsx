@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationEllipsis, PaginationItem } from "@/components/ui/pagination"
 import { Select, SelectContent, SelectTrigger } from "@/components/ui/select";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface Props {
     totalCount: number;
@@ -47,6 +48,15 @@ export const ProPagination = (props: Props) => {
 
     // 创建要渲染的页码数组
     const pages = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+
+    const [isBrowser, setIsBrowser] = useState(false);
+    useEffect(() => {
+        setIsBrowser(true);
+    }, []);
+
+    if (!isBrowser) {
+        return null;
+    }
 
     // --- 渲染部分 ---
     return (
