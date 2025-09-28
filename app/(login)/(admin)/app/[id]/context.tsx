@@ -1,4 +1,4 @@
-import { GappId } from "@/lib/dao/gapp/gapp_video.entity"
+import { GappId } from "@/lib/dao/video/gapp_video.entity"
 import { createContext, useContext } from "react"
 
 

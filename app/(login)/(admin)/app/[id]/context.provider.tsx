@@ -1,5 +1,5 @@
 "use client"
-import { GappId } from "@/lib/dao/gapp/gapp_video.entity"
+import { GappId } from "@/lib/dao/video/gapp_video.entity"
 import { AppContext } from "./context"
 
 interface Props {

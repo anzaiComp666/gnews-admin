@@ -1,4 +1,4 @@
-import { BannerStatus, IBannerEntity } from "@/lib/dao/biz/banner"
+import { BannerStatus, IBannerEntity } from "@/lib/dao/app/banner"
 import { CellContext } from "@tanstack/react-table"
 
 interface Props {

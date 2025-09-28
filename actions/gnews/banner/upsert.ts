@@ -1,10 +1,10 @@
 "use server"
 
 import { dataSources } from "@/lib/dao"
-import { BannerEntity } from "@/lib/dao/biz/banner"
+import { BannerEntity } from "@/lib/dao/app/banner"
 import { BannerUpsertParams, BannerUpsertSchema } from "./upsert-schema"
 import { authVerify } from "@/actions/auth/verify"
-import { GappId } from "@/lib/dao/gapp/gapp_video.entity"
+import { GappId } from "@/lib/dao/video/gapp_video.entity"
 
 
 export const bannerUpsert = async (appId: GappId, data: BannerUpsertParams) => {

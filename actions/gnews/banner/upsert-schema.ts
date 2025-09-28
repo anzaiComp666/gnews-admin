@@ -1,4 +1,4 @@
-import { BannerPosition, BannerStatus } from "@/lib/dao/biz/banner"
+import { BannerPosition, BannerStatus } from "@/lib/dao/app/banner"
 import { JumpType } from "@/lib/types/jump-type"
 import z from "zod"
 

@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { IBannerEntity } from "@/lib/dao/biz/banner"
+import { IBannerEntity } from "@/lib/dao/app/banner"
 import { CellContext } from "@tanstack/react-table"
 import { BannerUpsertDialog } from "../upsert-dialog"
 import { ProPopoverConfirm } from "@/pro-components/pro-popover-confirm"

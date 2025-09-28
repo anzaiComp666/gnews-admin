@@ -1,13 +1,13 @@
 "use server"
 
 import { dataSources } from "@/lib/dao";
-import { BannerEntity, IBannerEntity } from "@/lib/dao/biz/banner";
+import { BannerEntity, IBannerEntity } from "@/lib/dao/app/banner";
 import { instanceToPlain } from "class-transformer";
 import { TableListSchema, TableListSchemaType } from "@/schema/table-list.schema";
 import { Between, FindOptionsWhere } from "typeorm";
 import { isDateRange } from "react-day-picker";
 import { authVerify } from "../../auth/verify";
-import { GappId } from "@/lib/dao/gapp/gapp_video.entity";
+import { GappId } from "@/lib/dao/video/gapp_video.entity";
 
 
 export async function bannerList(appId: GappId, data: TableListSchemaType) {

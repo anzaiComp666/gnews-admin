@@ -1,6 +1,6 @@
 "use client"
 
-import { IBannerEntity } from "@/lib/dao/biz/banner"
+import { IBannerEntity } from "@/lib/dao/app/banner"
 import { JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProTable, ProTableRef } from "@/pro-components/pro-table"
 import { ProTableFilterVariant, ProTableFilterVariantKey } from "@/pro-components/pro-table/filter-form"
