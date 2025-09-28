@@ -7,9 +7,10 @@ import { TableListSchema, TableListSchemaType } from "@/schema/table-list.schema
 import { Between, FindOptionsWhere } from "typeorm";
 import { isDateRange } from "react-day-picker";
 import { authVerify } from "../../auth/verify";
+import { GappId } from "@/lib/dao/gapp/gapp_video.entity";
 
 
-export async function bannerList(data: TableListSchemaType) {
+export async function bannerList(appId: GappId, data: TableListSchemaType) {
     await authVerify()
     const params = TableListSchema.parse(data)
 
@@ -34,7 +35,7 @@ export async function bannerList(data: TableListSchemaType) {
     }
 
 
-    const [entities, total] = await dataSources.biz.withDataSource(async mgr => {
+    const [entities, total] = await dataSources.app[appId].withDataSource(async mgr => {
         return await mgr.findAndCount(BannerEntity, {
             where: where,
             skip: (params.page - 1) * params.pageSize,

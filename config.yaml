@@ -5,7 +5,7 @@ jwt:
 # 数据库连接配置
 db:
   # 业务数据库配置
-  biz:
+  app_1:
     host: '127.0.0.1'
     username: 'root'
     password: '123456'
@@ -13,7 +13,8 @@ db:
     timezone: '+00:00'
     synchronize: false
 
-  gapp:
+  # 视频数据库配置
+  video:
     host: '127.0.0.1'
     username: 'root'
     password: '123456'

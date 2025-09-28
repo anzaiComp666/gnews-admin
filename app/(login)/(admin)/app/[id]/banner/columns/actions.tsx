@@ -8,6 +8,7 @@ import { useState } from "react"
 import { ProButton } from "@/pro-components/pro-button"
 import { ToastUtil } from "@/lib/toastutil"
 import { bannerDelete } from "@/actions/gnews/banner/delete"
+import { useAppContext } from "../../context"
 
 interface Props {
     info: CellContext<IBannerEntity, unknown>
@@ -16,11 +17,13 @@ interface Props {
 export const ActionsRender = (props: Props) => {
 
     const table = useProTable()
+    const appContext = useAppContext()
     const [isLoading, setIsLoading] = useState(false)
+
     const onDelete = async () => {
         setIsLoading(true)
         try {
-            await bannerDelete({ id: props.info.row.original.id })
+            await bannerDelete(appContext.appId, { id: props.info.row.original.id })
             await table.refresh()
         } catch (error) {
             ToastUtil.error(error)

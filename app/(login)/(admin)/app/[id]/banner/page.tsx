@@ -14,6 +14,7 @@ import { PositionRender } from "./columns/position"
 import { TableDateCellRender } from "@/components/table-cell-render/date"
 import { ProImage } from "@/pro-components/pro-image"
 import { bannerList } from "@/actions/gnews/banner/list"
+import { useAppContext } from "../context"
 
 
 export default () => {
@@ -109,7 +110,7 @@ export default () => {
         }
     ]
 
-
+    const appContext = useAppContext()
 
     const onRequest = async (params: {
         page: number,
@@ -117,7 +118,7 @@ export default () => {
         columnFilters: any
         sorting: any
     }) => {
-        const { data, total } = await bannerList(params)
+        const { data, total } = await bannerList(appContext.appId, params)
         return {
             data: data,
             total: total,

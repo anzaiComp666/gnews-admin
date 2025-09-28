@@ -4,6 +4,7 @@ import { BannerPosition, BannerStatus, IBannerEntity } from "@/lib/dao/biz/banne
 import { JumpType, JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProFormDialog } from "@/pro-components/pro-form-dialog"
 import { useProTable } from "@/pro-components/pro-table/context"
+import { useAppContext } from "../context"
 
 interface Props {
     entity?: IBannerEntity
@@ -11,9 +12,10 @@ interface Props {
 }
 export const BannerUpsertDialog = (props: Props) => {
     const table = useProTable()
+    const appContext = useAppContext()
 
     const onSubmit = async (data: Record<string, any>) => {
-        await bannerUpsert(data as BannerUpsertParams)
+        await bannerUpsert(appContext.appId, data as BannerUpsertParams)
         await table.refresh()
     }
 

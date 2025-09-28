@@ -14,15 +14,15 @@ export default (props: PropsWithChildren) => {
             items: [
                 {
                     title: "首页",
-                    pathname: "/",
+                    pathname: "/app/1",
                 },
                 {
                     title: "轮播图管理",
-                    pathname: "/gnews/banner",
+                    pathname: "/app/1/banner",
                 },
                 {
                     title: "标签管理",
-                    pathname: "/gnews/labels",
+                    pathname: "/app/1/labels",
                 },
             ]
         }
