@@ -18,17 +18,12 @@ export default (props: PropsWithChildren) => {
                 },
                 {
                     title: "轮播图管理",
-                    pathname: "/banner",
+                    pathname: "/gnews/banner",
                 },
                 {
-                    title: "主页管理",
-                    children: [
-                        {
-                            title: "首页标签",
-                            pathname: "/home/labels"
-                        },
-                    ]
-                }
+                    title: "标签管理",
+                    pathname: "/gnews/labels",
+                },
             ]
         }
     ]

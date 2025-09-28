@@ -8,11 +8,13 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { ActionsRender } from "./columns/actions"
 import { BannerUpsertDialog } from "./upsert-dialog"
-import { bannerList } from "@/app/actions/banner/list"
 import { useRef } from "react"
 import { StatusRender } from "./columns/status"
 import { PositionRender } from "./columns/position"
 import { TableDateCellRender } from "@/components/table-cell-render/date"
+import { ProImage } from "@/pro-components/pro-image"
+import { bannerList } from "@/app/actions/gnews/banner/list"
+
 
 export default () => {
 
@@ -37,7 +39,7 @@ export default () => {
             enableColumnFilter: false,
             enableSorting: false,
             cell: info => (
-                <img src={info.getValue() as string} className="w-32 h-16 object-cover" />
+                <ProImage src={info.getValue() as string} className="w-32 h-16 object-cover" />
             )
         },
         {

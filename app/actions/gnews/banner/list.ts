@@ -3,10 +3,10 @@
 import { dataSources } from "@/lib/dao";
 import { BannerEntity, IBannerEntity } from "@/lib/dao/biz/banner";
 import { instanceToPlain } from "class-transformer";
-import { authVerify } from "../auth/verify";
 import { TableListSchema, TableListSchemaType } from "@/schema/table-list.schema";
 import { Between, FindOptionsWhere } from "typeorm";
 import { isDateRange } from "react-day-picker";
+import { authVerify } from "../../auth/verify";
 
 
 export async function bannerList(data: TableListSchemaType) {
