@@ -15,6 +15,7 @@ export interface ProSidebarGroup {
 export interface ProSidebarItem {
     title: string
     pathname: string
+    type: 'page' | 'group'
     hidden?: boolean
     children?: ProSidebarItem[]
 }
