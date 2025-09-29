@@ -2,6 +2,7 @@ import { GappVideoLabelGroupType, GappVideoLabelStatus } from "@/lib/dao/video/g
 import z from "zod"
 
 export const LabelUpsertSchema = z.object({
+    id: z.int().optional(),
     labelId: z.string().min(1, "请填写标签ID"),
     labelName: z.string().min(1, "请填写标签名称"),
     groupType: z.enum(GappVideoLabelGroupType, { error: "请选择标签分组" }),

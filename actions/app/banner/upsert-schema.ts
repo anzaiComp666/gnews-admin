@@ -3,7 +3,7 @@ import { JumpType } from "@/lib/types/jump-type"
 import z from "zod"
 
 export const BannerUpsertSchema = z.object({
-    id: z.number().optional(),
+    id: z.int().optional(),
     name: z.string().min(1, "请填写名称"),
     status: z.enum(BannerStatus, { error: "请选择状态" }),
     position: z.enum(BannerPosition, { error: "请选择位置" }),

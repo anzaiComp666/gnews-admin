@@ -11,23 +11,23 @@ db:
     password: '123456'
     database: 'gnews'
     timezone: '+00:00'
-    synchronize: false
+    synchronize: true
 
   # 视频数据库配置
   video:
     host: '127.0.0.1'
     username: 'root'
     password: '123456'
-    database: 'telemaster'
+    database: 'gnews'
     timezone: '+00:00'
-    synchronize: false
+    synchronize: true
 
   # 后台数据库配置
   admin:
     host: '127.0.0.1'
     username: 'root'
     password: '123456'
-    database: 'gnews_admin'
+    database: 'gnews'
     timezone: '+00:00'
     synchronize: true
 

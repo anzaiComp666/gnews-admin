@@ -26,6 +26,11 @@ export const LabelUpsertDialog = (props: Props) => {
             onSubmit={onSubmit}
             schema={LabelUpsertSchema}
             fields={{
+                id: {
+                    type: 'numberInput',
+                    defaultValue: props.entity?.id ?? 0,
+                    hidden: true,
+                },
                 labelId: {
                     type: 'input',
                     defaultValue: props.entity?.labelId ?? "",

@@ -72,7 +72,6 @@ export const ProTableFilterForm = (props: Props) => {
                 return <ProNumberInput {...register(column.id)} type="number" hiddenStepper />
 
             case "select":
-
                 return (
                     <Controller control={control} name={column.id} render={({ field }) => (
                         <Select {...field} value={field.value} onValueChange={field.onChange}>

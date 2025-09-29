@@ -11,11 +11,12 @@ interface Props {
 
 export const ChildrenCell = (props: Props) => {
     const { info } = props
+    const original = info.row.original
     const pathname = usePathname()
 
     return (
-        <Button variant="link" className="cursor-pointer">
-            <Link href={`${pathname}/${info.getValue() as number}`}>
+        <Button variant="link" className="cursor-pointer" asChild>
+            <Link href={`${pathname}/${original.labelId}`}>
                 {info.getValue() as number}
             </Link>
         </Button>

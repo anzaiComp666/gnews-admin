@@ -5,11 +5,13 @@ import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAppContext } from "../context"
 import { labelList } from "@/actions/video/label/list"
-import { ProTable } from "@/pro-components/pro-table"
+import { ProTable, ProTableRef } from "@/pro-components/pro-table"
 import { enumToOptions } from "@/lib/enumutil"
 import { ActionsCell } from "./cell/acions"
 import { ChildrenCell } from "./cell/children-count"
-import { useRouter } from "next/navigation"
+import { LabelUpsertDialog } from "./upsert-dialog"
+import { Button } from "@/components/ui/button"
+import { useRef } from "react"
 
 
 interface Props {
@@ -17,9 +19,6 @@ interface Props {
 }
 
 export const LabelsPage = (props: Props) => {
-    const router = useRouter()
-    console.log(router)
-
     const columns: ColumnDef<GappVideoLabelEntity>[] = [
         {
             header: "ID",
@@ -119,19 +118,22 @@ export const LabelsPage = (props: Props) => {
     }
 
 
-    // const tableRef = useRef<ProTableRef>(null)
-    // const header = (
-    //     <div className="flex justify-end gap-2">
-    //         <BannerUpsertDialog>
-    //             <Button>添加</Button>
-    //         </BannerUpsertDialog>
-    //         <Button onClick={() => tableRef?.current?.refresh()} variant="outline">刷新</Button>
-    //     </div>
-    // )
+    const tableRef = useRef<ProTableRef>(null)
+    const header = (
+        <div className="flex justify-end gap-2">
+            <LabelUpsertDialog>
+                <Button>添加</Button>
+            </LabelUpsertDialog>
+
+            <Button onClick={() => tableRef?.current?.refresh()} variant="outline">
+                刷新
+            </Button>
+        </div>
+    )
 
     return <ProTable<GappVideoLabelEntity>
-        // ref={tableRef}
-        // header={header}
+        ref={tableRef}
+        header={header}
         rowKey="id"
         columns={columns}
         defaultSorting={[{ id: 'orderNo', desc: true }]}

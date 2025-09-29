@@ -12,11 +12,10 @@ export async function labelUpsert(appId: GappId, data: LabelUpsertSchemaType) {
     const params = LabelUpsertSchema.parse(data)
     await dataSources.video.withDataSource(async manager => {
 
-        if (params.labelId && params.labelId.length > 0) {
+        if (params.id && params.id > 0) {
 
             await manager.update(GappVideoLabelEntity, {
-                appId: appId,
-                labelId: params.labelId
+                id: params.id,
             }, {
                 labelName: params.labelName,
                 groupType: params.groupType,

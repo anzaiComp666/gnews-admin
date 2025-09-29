@@ -1,6 +1,5 @@
 "use client"
 
-
 import { PropsWithChildren } from "react"
 import { ProSidebar, ProSidebarGroup } from "@/pro-components/pro-sidebar"
 import { AppSidebarFooter } from "./sidebar-footer"
@@ -18,7 +17,7 @@ export default (props: PropsWithChildren) => {
                 },
                 {
                     title: "标签管理",
-                    pathname: "/app/1/labels",
+                    pathname: "/app/1/label",
                 },
             ]
         }
