@@ -4,8 +4,9 @@ import { Separator } from "@/components/ui/separator"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { usePathname, useSelectedLayoutSegments } from "next/navigation"
-import { useMemo } from "react"
+import { usePathname } from "next/navigation"
+import { useEffect, useMemo, useState } from "react"
+import { BreadcrumbContext } from "./breadcrumbs"
 
 export interface ProSidebarGroup {
     title: string
@@ -15,7 +16,6 @@ export interface ProSidebarGroup {
 export interface ProSidebarItem {
     title: string
     pathname: string
-    type: 'page' | 'group'
     hidden?: boolean
     children?: ProSidebarItem[]
 }
@@ -32,31 +32,23 @@ export const ProSidebar = (props: {
 
     const { groups } = props
     const pathname = usePathname()
+    const [breadcrumbs, setBreadcrumbs] = useState<{ title: string, pathname: string }[]>([])
+    // useEffect(() => {
+    //     setBreadcrumbs([])
+    // }, [pathname])
 
-    const breadcrumbs: { title: string, pathname: string }[] = []
-    const createBreadcrumbs = (items: ProSidebarItem[]): boolean => {
-
-        if (pathname == "/") {
-
-        }
-
-        for (const item of items) {
-            if (item.pathname && item.pathname == pathname) {
-                breadcrumbs.push({ title: item.title, pathname: item.pathname ?? "#" })
-                return true
+    const addBreadcrumb = (title: string, pathname: string) => {
+        setBreadcrumbs(prev => {
+            const existingIndex = prev.findIndex(b => b.pathname === pathname)
+            let newBreadcrumbs: { title: string, pathname: string }[]
+            if (existingIndex !== -1) {
+                newBreadcrumbs = prev.slice(0, existingIndex + 1)
+            } else {
+                newBreadcrumbs = [...prev, { title, pathname }]
             }
-
-            if (item.children) {
-                if (createBreadcrumbs(item.children)) {
-                    breadcrumbs.unshift({ title: item.title, pathname: item.pathname ?? "#" })
-                    return true
-                }
-
-            }
-        }
-        return false
+            return newBreadcrumbs
+        })
     }
-    createBreadcrumbs(props.groups.flatMap(g => g.items))
 
     const breadcrumbNavigation = useMemo(() => {
 
@@ -104,9 +96,13 @@ export const ProSidebar = (props: {
                     <Separator orientation="vertical" className="mr-2 h-4" />
                     {breadcrumbNavigation}
                 </header>
-                <div className="flex-1 p-2 overflow-hidden">
-                    {props.children}
-                </div>
+                <BreadcrumbContext.Provider value={{
+                    addBreadcrumb: addBreadcrumb
+                }}>
+                    <div className="flex-1 p-2 overflow-hidden">
+                        {props.children}
+                    </div>
+                </BreadcrumbContext.Provider>
             </SidebarInset>
         </SidebarProvider>
     )
@@ -172,9 +168,18 @@ const ProSidebarMenuItemRender = (props: {
         )
 
     } else {
+
+        let isActive = false
+        if (pathname == "/") {
+            isActive = item.pathname == pathname
+        } else {
+            isActive = pathname.includes(item.pathname ?? "") && item.pathname != "/"
+        }
+
+
         return (
             <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild isActive={pathname == "/" ? item.pathname == pathname : pathname.includes(item.pathname ?? "") && item.pathname != "/"}>
+                <SidebarMenuButton asChild isActive={isActive}>
                     <Link href={item.pathname!}>
                         {item.title}
                     </Link>

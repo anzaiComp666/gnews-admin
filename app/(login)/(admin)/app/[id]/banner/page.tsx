@@ -7,7 +7,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { ActionsRender } from "./columns/actions"
 import { BannerUpsertDialog } from "./upsert-dialog"
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { StatusRender } from "./columns/status"
 import { PositionRender } from "./columns/position"
 import { TableDateCellRender } from "@/components/table-cell-render/date"
@@ -15,6 +15,7 @@ import { ProImage } from "@/pro-components/pro-image"
 import { bannerList } from "@/actions/app/banner/list"
 import { useAppContext } from "../context"
 import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
+import { useBreadcrumb } from "@/pro-components/pro-sidebar/breadcrumbs"
 
 
 export default () => {
@@ -142,6 +143,8 @@ export default () => {
             <Button onClick={() => tableRef?.current?.refresh()} variant="outline">刷新</Button>
         </div>
     )
+
+
 
     return <ProTable<IBannerEntity>
         ref={tableRef}
