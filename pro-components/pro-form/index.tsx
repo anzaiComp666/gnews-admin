@@ -6,8 +6,14 @@ import React from "react";
 import { ProFormCommonProps } from "./fields/common";
 import { ProFormFieldSelect, ProFormFieldSelectProps } from "./fields/select";
 import { ProFormFieldNumberInput, ProFormFieldNumberInputProps } from "./fields/number-input";
+import { ProFormFieldCheckbox, ProFormFieldCheckboxProps } from "./fields/checkbox";
 
-export type ProFormFieldProps = ProFormCommonProps & (ProFormFieldInputProps | ProFormFieldNumberInputProps | ProFormFieldSelectProps)
+export type ProFormFieldProps = ProFormCommonProps & (
+    ProFormFieldInputProps |
+    ProFormFieldNumberInputProps |
+    ProFormFieldSelectProps |
+    ProFormFieldCheckboxProps
+)
 
 export interface ProFormProps<FormFields> {
     // 原始表单配置
@@ -109,6 +115,9 @@ const ProFormFieldRender = (props: ProFormFieldProps & { name: string, form: Use
 
             case 'select':
                 return <ProFormFieldSelect {...restProps} field={field} />
+
+            case 'checkbox':
+                return <ProFormFieldCheckbox {...restProps} field={field} />
         }
     }
 

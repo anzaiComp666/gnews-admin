@@ -1,13 +1,14 @@
 "use server"
 
 import { dataSources } from "@/lib/dao";
-import { instanceToPlain } from "class-transformer";
 import { TableListSchema, TableListSchemaType } from "@/schema/table-list.schema";
 import { Between, FindOptionsWhere } from "typeorm";
 import { isDateRange } from "react-day-picker";
 import { authVerify } from "../../auth/verify";
 import { GappId } from "@/lib/dao/video/gapp_video.entity";
 import { GappVideoLabelEntity } from "@/lib/dao/video/gapp_video_label.entity";
+import { instanceToPlain } from "class-transformer";
+
 
 
 export async function labelList(appId: GappId, data: TableListSchemaType) {
@@ -19,7 +20,9 @@ export async function labelList(appId: GappId, data: TableListSchemaType) {
         order[item.id] = item.desc ? "DESC" : "ASC"
     }
 
-    const where: FindOptionsWhere<GappVideoLabelEntity> = {}
+    const where: FindOptionsWhere<GappVideoLabelEntity> = {
+        appId: appId,
+    }
     for (const filter of params.columnFilters) {
         switch (filter.id) {
             case "createdAt":
@@ -43,6 +46,8 @@ export async function labelList(appId: GappId, data: TableListSchemaType) {
             order: order,
         })
     })
+
+
     return {
         data: instanceToPlain(entities) as GappVideoLabelEntity[],
         total: total

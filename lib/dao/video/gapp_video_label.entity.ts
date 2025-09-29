@@ -67,6 +67,9 @@ export class GappVideoLabelEntity extends BaseEntity {
 
   @Column({ nullable: true, comment: '标签背景图' })
   bgImageUrl?: string;
+
+  @Column({ default: 0, comment: '子标签数量' })
+  childrenCount: number;
 }
 
 

@@ -14,7 +14,7 @@ export const bannerUpsert = async (appId: GappId, data: BannerUpsertParams) => {
     await dataSources.app[appId].withDataSource(async manager => {
 
         if (params.id && params.id > 0) {
-            await manager.update("banner", {
+            await manager.update(BannerEntity, {
                 id: params.id
             }, {
                 name: params.name,

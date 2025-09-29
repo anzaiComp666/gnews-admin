@@ -1,3 +1,4 @@
+import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProButton } from "@/pro-components/pro-button"
@@ -6,18 +7,40 @@ import { ProNumberInput } from "@/pro-components/pro-number-input"
 import { Column } from "@tanstack/react-table"
 import { Controller, useForm } from "react-hook-form"
 
-export enum ProTableFilterVariant {
-    input = 'input',
-    numberInput = 'number-input',
-    select = 'select',
-    dateRange = 'date-range',
+interface FilterVariantInput {
+    type: 'input'
 }
 
-export const ProTableFilterVariantKey = {
-    filterVariant: 'filterVariant',
-    filterSelectOptions: 'filterSelectOptions'
+interface FilterVariantNumberInput {
+    type: 'number-input'
 }
 
+interface FilterVariantSelect {
+    type: 'select'
+    options: { label: string; value: any }[]
+}
+
+interface FilterVariantDateRange {
+    type: 'date-range'
+}
+
+interface FilterVariantCheckbox {
+    type: 'checkbox'
+}
+
+type FilterVariant =
+    FilterVariantInput |
+    FilterVariantNumberInput |
+    FilterVariantSelect |
+    FilterVariantDateRange |
+    FilterVariantCheckbox
+const FilterVariantKey = "filterVariant"
+
+export const makeFilterVariant = (variant: FilterVariant) => {
+    return {
+        [FilterVariantKey]: variant
+    }
+}
 
 interface Props {
     isPending?: boolean
@@ -26,18 +49,30 @@ interface Props {
 
 export const ProTableFilterForm = (props: Props) => {
     const columns = props.columns.filter(column => column.getCanFilter())
-    const { control, register, handleSubmit, reset } = useForm();
+    const { control, register, handleSubmit, reset } = useForm({
+        defaultValues: {
+            // 初始化默认值
+            ...columns.reduce((acc, column) => {
+                acc[column.id] = column.getFilterValue() ?? ''
+                return acc
+            }, {} as Record<string, any>)
+        }
+    });
 
     const renderFieldComponent = (column: Column<any, unknown>) => {
         const meta = (column.columnDef.meta ?? {}) as Record<string, any>
 
-        const variant = meta[ProTableFilterVariantKey.filterVariant] as ProTableFilterVariant
-        switch (variant) {
-            case ProTableFilterVariant.numberInput:
+        const variant = meta[FilterVariantKey] as FilterVariant | undefined
+        if (!variant) {
+            return <Input {...register(column.id)} name={column.id} />
+        }
+
+        switch (variant.type) {
+            case "number-input":
                 return <ProNumberInput {...register(column.id)} type="number" hiddenStepper />
 
-            case ProTableFilterVariant.select:
-                const options = meta[ProTableFilterVariantKey.filterSelectOptions] as { label: string; value: any }[]
+            case "select":
+
                 return (
                     <Controller control={control} name={column.id} render={({ field }) => (
                         <Select {...field} value={field.value} onValueChange={field.onChange}>
@@ -46,7 +81,7 @@ export const ProTableFilterForm = (props: Props) => {
                             </SelectTrigger>
                             <SelectContent>
                                 <SelectGroup>
-                                    {options.map(option => (
+                                    {variant.options.map(option => (
                                         <SelectItem key={option.value.toString()} value={option.value.toString()}>{option.label}</SelectItem>
                                     ))}
                                 </SelectGroup>
@@ -55,7 +90,7 @@ export const ProTableFilterForm = (props: Props) => {
                     )} />
                 )
 
-            case ProTableFilterVariant.dateRange:
+            case "date-range":
                 return (
                     <Controller control={control} name={column.id} render={({ field }) => (
                         <ProDatePicker
@@ -63,6 +98,13 @@ export const ProTableFilterForm = (props: Props) => {
                             value={field.value}
                             onChange={field.onChange}
                             placeholder="选择日期范围" />
+                    )} />
+                )
+
+            case "checkbox":
+                return (
+                    <Controller control={control} name={column.id} render={({ field }) => (
+                        <Checkbox {...field} onCheckedChange={field.onChange} checked={field.value ?? false} />
                     )} />
                 )
 
@@ -84,11 +126,9 @@ export const ProTableFilterForm = (props: Props) => {
     }
 
     const onReset = () => {
-        reset()
-        columns.forEach(column => {
-            column.setFilterValue(undefined)
-        })
-    }
+        reset();
+        columns.forEach(column => column.setFilterValue(undefined));
+    };
 
 
     if (columns.length === 0) {

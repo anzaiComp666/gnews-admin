@@ -181,6 +181,10 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
 
 
 const loadPageSize = (key: string): number => {
+    if (typeof window === 'undefined') {
+        return 10
+    }
+
     try {
         const value = localStorage.getItem(key)
         if (value) {

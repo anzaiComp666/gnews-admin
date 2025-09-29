@@ -1,9 +1,8 @@
 "use client"
 
-import { IBannerEntity } from "@/lib/dao/app/banner"
+import { BannerPosition, IBannerEntity } from "@/lib/dao/app/banner"
 import { JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProTable, ProTableRef } from "@/pro-components/pro-table"
-import { ProTableFilterVariant, ProTableFilterVariantKey } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { Button } from "@/components/ui/button"
 import { ActionsRender } from "./columns/actions"
@@ -15,6 +14,7 @@ import { TableDateCellRender } from "@/components/table-cell-render/date"
 import { ProImage } from "@/pro-components/pro-image"
 import { bannerList } from "@/actions/app/banner/list"
 import { useAppContext } from "../context"
+import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 
 
 export default () => {
@@ -24,14 +24,14 @@ export default () => {
             header: "ID",
             accessorKey: "id",
             meta: {
-                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.numberInput
+                ...makeFilterVariant({ type: 'number-input' })
             }
         },
         {
             header: "名称",
             accessorKey: "name",
             meta: {
-                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.input
+                ...makeFilterVariant({ type: "input" })
             }
         },
         {
@@ -48,11 +48,13 @@ export default () => {
             accessorKey: "status",
             cell: info => <StatusRender info={info} />,
             meta: {
-                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
-                [ProTableFilterVariantKey.filterSelectOptions]: [
-                    { label: '激活', value: 'active' },
-                    { label: '未激活', value: 'inactive' },
-                ]
+                ...makeFilterVariant({
+                    type: 'select',
+                    options: [
+                        { label: '激活', value: 'active' },
+                        { label: '未激活', value: 'inactive' },
+                    ]
+                })
             }
         },
         {
@@ -60,10 +62,12 @@ export default () => {
             accessorKey: "position",
             cell: info => <PositionRender info={info} />,
             meta: {
-                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
-                [ProTableFilterVariantKey.filterSelectOptions]: [
-                    { label: '首页', value: 'home' },
-                ]
+                ...makeFilterVariant({
+                    type: 'select',
+                    options: [
+                        { label: '首页', value: BannerPosition.home },
+                    ]
+                })
             }
         },
         {
@@ -77,8 +81,10 @@ export default () => {
             accessorKey: "jumpType",
             cell: info => JumpTypeOptions.find(item => item.value === info.getValue())?.label || info.getValue(),
             meta: {
-                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.select,
-                [ProTableFilterVariantKey.filterSelectOptions]: JumpTypeOptions
+                ...makeFilterVariant({
+                    type: 'select',
+                    options: JumpTypeOptions
+                })
             }
         },
         {
@@ -92,7 +98,9 @@ export default () => {
             accessorKey: "createdAt",
             cell: info => <TableDateCellRender value={info.getValue()} />,
             meta: {
-                [ProTableFilterVariantKey.filterVariant]: ProTableFilterVariant.dateRange
+                ...makeFilterVariant({
+                    type: 'date-range'
+                })
             }
         },
         {

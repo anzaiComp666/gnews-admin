@@ -4,7 +4,7 @@ import { Separator } from "@/components/ui/separator"
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarMenuSub, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
+import { usePathname, useSelectedLayoutSegments } from "next/navigation"
 import { useMemo } from "react"
 
 export interface ProSidebarGroup {
@@ -14,8 +14,8 @@ export interface ProSidebarGroup {
 
 export interface ProSidebarItem {
     title: string
+    pathname: string
     hidden?: boolean
-    pathname?: string
     children?: ProSidebarItem[]
 }
 
@@ -25,6 +25,8 @@ export const ProSidebar = (props: {
     groups: ProSidebarGroup[],
     footer?: React.ReactNode,
     children?: React.ReactNode,
+
+
 }) => {
 
     const { groups } = props
@@ -32,6 +34,11 @@ export const ProSidebar = (props: {
 
     const breadcrumbs: { title: string, pathname: string }[] = []
     const createBreadcrumbs = (items: ProSidebarItem[]): boolean => {
+
+        if (pathname == "/") {
+
+        }
+
         for (const item of items) {
             if (item.pathname && item.pathname == pathname) {
                 breadcrumbs.push({ title: item.title, pathname: item.pathname ?? "#" })

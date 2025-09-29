@@ -13,13 +13,43 @@ export default (props: PropsWithChildren) => {
             title: "GNews",
             items: [
                 {
-                    title: "轮播图管理",
-                    pathname: "/app/1/banner",
-                },
-                {
-                    title: "标签管理",
-                    pathname: "/app/1/labels",
-                },
+                    title: "app",
+                    pathname: "app",
+                    children: [
+                        {
+                            title: "应用",
+                            pathname: "[id]",
+                            children: [
+                                {
+                                    title: "Banner管理",
+                                    pathname: "banner"
+                                },
+                                {
+                                    title: "标签管理",
+                                    pathname: "labels",
+                                    children: [
+                                        {
+                                            title: "标签详情",
+                                            pathname: "[id]"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                }
+
+
+
+                // {
+                //     title: "轮播图管理",
+                //     pathname: "/app/1/banner",
+                // },
+                // {
+                //     title: "标签管理",
+                //     pathname: "/app/1/labels",
+
+                // },
             ]
         }
     ]
