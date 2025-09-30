@@ -1,26 +1,32 @@
-"use client"
-
 import { GappVideoLabelEntity, GappVideoLabelGroupType, GappVideoLabelGroupTypeTextMap, GappVideoLabelStatus, GappVideoLabelStatusTextMap } from "@/lib/dao/video/gapp_video_label.entity"
+import { enumToOptions } from "@/lib/enumutil"
 import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef, ColumnFiltersState, SortingState } from "@tanstack/react-table"
-import { useAppContext } from "../context"
+import { ChildrenCell } from "../../cell/children-count"
+import { useAppContext } from "../../../context"
 import { labelList } from "@/actions/video/label/list"
-import { ProTable, ProTableRef } from "@/pro-components/pro-table"
-import { enumToOptions } from "@/lib/enumutil"
-import { ActionsCell } from "./cell/acions"
-import { ChildrenCell } from "./cell/children-count"
-import { LabelUpsertDialog } from "./dialogs/upsert"
+import { ProTable } from "@/pro-components/pro-table"
 import { Button } from "@/components/ui/button"
-import { useRef } from "react"
-import { AddSubLabelDialog } from "./dialogs/addsub"
 
-
-interface Props {
-    labelId?: string
-}
-
-export const LabelsPage = (props: Props) => {
+export const AddSubLabelDialogContent = () => {
     const columns: ColumnDef<GappVideoLabelEntity>[] = [
+        {
+            id: "selection",
+            header: ({ table }) => (
+                <input
+                    type="checkbox"
+                    checked={table.getIsAllPageRowsSelected()}
+                    onChange={table.getToggleAllPageRowsSelectedHandler()}
+                />
+            ),
+            cell: ({ row }) => (
+                <input
+                    type="checkbox"
+                    checked={row.getIsSelected()}
+                    onChange={row.getToggleSelectedHandler()}
+                />
+            ),
+        },
         {
             header: "ID",
             accessorKey: "id",
@@ -87,28 +93,6 @@ export const LabelsPage = (props: Props) => {
             accessorKey: "bgImageUrl",
             enableSorting: false,
             enableColumnFilter: false,
-        },
-        {
-            header: "子标签数",
-            accessorKey: "childrenCount",
-            enableSorting: true,
-            enableColumnFilter: true,
-            cell: info => <ChildrenCell info={info} />,
-            meta: {
-                ...makeFilterVariant({
-                    type: 'select',
-                    options: [
-                        { label: '有子标签', value: 'has' },
-                        { label: '无子标签', value: 'no' },
-                    ]
-                })
-            }
-        },
-        {
-            header: "操作",
-            enableSorting: false,
-            enableColumnFilter: false,
-            cell: info => <ActionsCell info={info} />
         }
     ]
 
@@ -120,9 +104,19 @@ export const LabelsPage = (props: Props) => {
         columnFilters: ColumnFiltersState
         sorting: SortingState
     }) => {
+
+
+        const columnFilters = [
+            ...params.columnFilters,
+            {
+                id: "childrenCount",
+                value: "no"
+            }
+        ]
+        console.log(params)
         const { data, total } = await labelList(appContext.appId, {
             ...params,
-            labelId: props.labelId,
+            columnFilters: columnFilters
         })
         return {
             data: data,
@@ -131,34 +125,45 @@ export const LabelsPage = (props: Props) => {
     }
 
 
-    const tableRef = useRef<ProTableRef>(null)
+    // const tableRef = useRef<ProTableRef>(null)
 
-    const header = (
-        <div className="flex justify-end gap-2">
-            <LabelUpsertDialog>
-                <Button>添加</Button>
-            </LabelUpsertDialog>
+    // const header = (
+    //     <div className="flex justify-end gap-2">
+    //         <LabelUpsertDialog>
+    //             <Button>添加</Button>
+    //         </LabelUpsertDialog>
 
-            <AddSubLabelDialog>
-                <Button className="aria-hidden:hidden" aria-hidden={props.labelId == null}>
-                    添加子标签
-                </Button>
-            </AddSubLabelDialog>
+    //         <AddSubLabelDialog>
+    //             <Button className="aria-hidden:hidden" aria-hidden={props.labelId == null}>
+    //                 添加子标签
+    //             </Button>
+    //         </AddSubLabelDialog>
 
-            <Button onClick={() => tableRef?.current?.refresh()} variant="outline">
-                刷新
-            </Button>
+    //         <Button onClick={() => tableRef?.current?.refresh()} variant="outline">
+    //             刷新
+    //         </Button>
+    //     </div>
+    // )
+
+    return (
+        <div className="overflow-hidden flex flex-col">
+            <div className="flex-1 overflow-hidden">
+                <ProTable<GappVideoLabelEntity>
+                    // ref={tableRef}
+                    // header={header}
+                    rowKey="id"
+                    columns={columns}
+                    defaultSorting={[
+                        { id: 'orderNo', desc: true },
+                        { id: 'id', desc: false }
+                    ]}
+                    onRequest={onRequest}
+                    enableRowSelection
+                />
+            </div>
+            <div className="flex justify-center gap-2 p-4">
+                <Button>确定添加</Button>
+            </div>
         </div>
     )
-
-    return <ProTable<GappVideoLabelEntity>
-        ref={tableRef}
-        header={header}
-        rowKey="id"
-        columns={columns}
-        defaultSorting={[
-            { id: 'orderNo', desc: true },
-        ]}
-        onRequest={onRequest}
-    />
 }

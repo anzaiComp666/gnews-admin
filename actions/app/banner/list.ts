@@ -18,6 +18,9 @@ export async function bannerList(appId: GappId, data: TableListSchemaType) {
     for (const item of params.sorting) {
         order[item.id] = item.desc ? "DESC" : "ASC"
     }
+    if (order["id"] == null) {
+        order["id"] = "DESC"
+    }
 
     const where: FindOptionsWhere<BannerEntity> = {}
     for (const filter of params.columnFilters) {

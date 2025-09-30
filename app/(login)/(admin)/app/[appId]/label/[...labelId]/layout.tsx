@@ -27,7 +27,7 @@ export async function generateMetadata(props: {
 
 
     return {
-        title: items[items.length - 1].title,
+        title: '标签管理-' + items[items.length - 1].title,
         other: {
             ...makeBreadcrumbMeta(items)
         },

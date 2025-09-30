@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
     return {
         title: "标签管理",
         other: {
-            ...makeBreadcrumbMeta([{ title: "标签管理", pathname: `/app/${params.appId}/labels` }]),
+            ...makeBreadcrumbMeta([{ title: "标签管理", pathname: `/app/${params.appId}/label` }]),
         },
     }
 }

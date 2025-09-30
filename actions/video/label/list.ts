@@ -1,23 +1,28 @@
 "use server"
 
 import { dataSources } from "@/lib/dao";
-import { TableListSchema, TableListSchemaType } from "@/schema/table-list.schema";
-import { Between, FindOptionsWhere } from "typeorm";
+import { Between, FindOptionsWhere, MoreThan } from "typeorm";
 import { isDateRange } from "react-day-picker";
 import { authVerify } from "../../auth/verify";
 import { GappId } from "@/lib/dao/video/gapp_video.entity";
 import { GappVideoLabelEntity } from "@/lib/dao/video/gapp_video_label.entity";
 import { instanceToPlain } from "class-transformer";
+import { LabelListSchema, LabelListSchemaType } from "./list-schema";
+import { GappVideoLabelParentEntity } from "@/lib/dao/video/gapp_video_label_parent.entity";
 
 
+export async function labelList(appId: GappId, data: LabelListSchemaType) {
 
-export async function labelList(appId: GappId, data: TableListSchemaType) {
     await authVerify()
-    const params = TableListSchema.parse(data)
+    const params = LabelListSchema.parse(data)
 
     const order: Record<string, "ASC" | "DESC"> = {}
     for (const item of params.sorting) {
-        order[item.id] = item.desc ? "DESC" : "ASC"
+        order["gvl." + item.id] = item.desc ? "DESC" : "ASC"
+    }
+
+    if (order["gvl.id"] == null) {
+        order["gvl.id"] = "DESC"
     }
 
     const where: FindOptionsWhere<GappVideoLabelEntity> = {
@@ -31,20 +36,34 @@ export async function labelList(appId: GappId, data: TableListSchemaType) {
                 }
                 break;
 
+            case "childrenCount":
+                if (filter.value == "has") {
+                    where.childrenCount = MoreThan(0)
+                } else {
+                    where.childrenCount = 0
+                }
+                break;
+
             default:
                 where[filter.id as keyof GappVideoLabelEntity] = filter.value
                 break
         }
     }
 
-
     const [entities, total] = await dataSources.video.withDataSource(async mgr => {
-        return await mgr.findAndCount(GappVideoLabelEntity, {
-            where: where,
-            skip: (params.page - 1) * params.pageSize,
-            take: params.pageSize,
-            order: order,
-        })
+
+        const qb = mgr.createQueryBuilder(GappVideoLabelEntity, "gvl")
+            .where(where)
+            .skip((params.page - 1) * params.pageSize)
+            .take(params.pageSize)
+            .orderBy(order)
+
+        if (params.labelId) {
+            qb.innerJoin(GappVideoLabelParentEntity, "gvlp", "gvl.labelId = gvlp.labelId AND gvlp.parentId = :parentId", { parentId: params.labelId })
+        }
+
+        return qb.getManyAndCount()
+
     })
 
 

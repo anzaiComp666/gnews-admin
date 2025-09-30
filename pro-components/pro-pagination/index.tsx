@@ -62,7 +62,7 @@ export const ProPagination = (props: Props) => {
     return (
         <Pagination className=" justify-between select-none">
             <PaginationContent>
-                <PaginationItem className="flex items-center">
+                <PaginationItem className="flex items-center gap-2">
                     <span className="text-sm text-muted-foreground whitespace-nowrap">总数量: {totalCount}</span>
                     <Select>
                         <SelectTrigger>

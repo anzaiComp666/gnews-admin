@@ -1,6 +1,6 @@
 import { ProFormDialog } from "@/pro-components/pro-form-dialog"
 import { useProTable } from "@/pro-components/pro-table/context"
-import { useAppContext } from "../context"
+import { useAppContext } from "../../context"
 import { GappVideoLabelGroupType, GappVideoLabelGroupTypeTextMap, GappVideoLabelStatus, GappVideoLabelStatusTextMap, IGappVideoLabelEntity } from "@/lib/dao/video/gapp_video_label.entity"
 import { LabelUpsertSchema, LabelUpsertSchemaType } from "@/actions/video/label/upsert-schema"
 import { enumToOptions } from "@/lib/enumutil"

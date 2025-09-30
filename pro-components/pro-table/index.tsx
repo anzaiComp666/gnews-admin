@@ -7,7 +7,6 @@ import { ProPagination } from "../pro-pagination"
 import { ProTableFilterForm } from "./filter-form"
 import { ProTableContext } from "./context"
 import { ProTableRow } from "./row"
-import { NoSSR } from "@/components/nossr"
 
 export interface ProTableRef {
     refresh: () => Promise<void>
@@ -35,7 +34,10 @@ interface Props<T> {
     }) => Promise<{ data: T[]; total: number }>
 
     // 默认排序
-    defaultSorting?: SortingState
+    defaultSorting?: SortingState,
+
+    // 是否启用行选择
+    enableRowSelection?: boolean,
 }
 
 export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTableRef>) => {
@@ -47,6 +49,7 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
     // table state
     const [sorting, setSorting] = useState<SortingState>(props.defaultSorting ?? [])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = useState({})
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -69,11 +72,15 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
             sorting,
             columnFilters,
             pagination,
+            rowSelection
         },
 
         getCoreRowModel: getCoreRowModel(),
         enableFilters: true,
         enableMultiSort: true,
+
+        enableRowSelection: true,
+        onRowSelectionChange: setRowSelection,
 
         manualSorting: true,
         onSortingChange: setSorting,
