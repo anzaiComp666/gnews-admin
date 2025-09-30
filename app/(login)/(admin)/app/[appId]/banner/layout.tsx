@@ -9,7 +9,7 @@ export async function generateMetadata(props: {
     return {
         title: "Banner管理",
         other: {
-            ...makeBreadcrumbMeta({ title: "Banner管理", pathname: `/app/${params.appId}/banner` }),
+            ...makeBreadcrumbMeta([{ title: "Banner管理", pathname: `/app/${params.appId}/banner` }]),
         },
     }
 }

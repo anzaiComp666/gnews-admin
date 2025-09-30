@@ -1,15 +1,35 @@
-import { makeBreadcrumbMeta } from "@/pro-components/pro-sidebar/breadcrumbs/util";
+import { labelInfos } from "@/actions/video/label/infos";
+import { IBreadcrumbItem, makeBreadcrumbMeta } from "@/pro-components/pro-sidebar/breadcrumbs/util";
 import { PropsWithChildren } from "react";
 
 
 export async function generateMetadata(props: {
-    params: Promise<{ labelId: string[], appId: string }>
+    params: Promise<{
+        appId: string,
+        labelId: string[],
+    }>
 }) {
+
+
     const params = await props.params
+    const infos = await labelInfos(Number(params.appId), params.labelId)
+    const infosMap = new Map(infos.map(i => [i.labelId, i]))
+
+    const items: IBreadcrumbItem[] = []
+    let basePath = `/app/${params.appId}/label`
+    for (const element of params.labelId) {
+        basePath += `/${element}`
+        items.push({
+            title: infosMap.get(element)?.labelName ?? element,
+            pathname: basePath
+        })
+    }
+
+
     return {
-        title: "T0001标签管理",
+        title: items[items.length - 1].title,
         other: {
-            ...makeBreadcrumbMeta({ title: "T0001标签管理", pathname: `/app/${params.appId}/labels/${params.labelId.join("/")}` })
+            ...makeBreadcrumbMeta(items)
         },
     }
 }

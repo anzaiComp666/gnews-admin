@@ -18,18 +18,18 @@ db:
     host: '127.0.0.1'
     username: 'root'
     password: '123456'
-    database: 'gnews'
+    database: 'telemaster'
     timezone: '+00:00'
-    synchronize: true
+    synchronize: false
 
   # 后台数据库配置
   admin:
     host: '127.0.0.1'
     username: 'root'
     password: '123456'
-    database: 'gnews'
+    database: 'gnews_admin'
     timezone: '+00:00'
-    synchronize: true
+    synchronize: false
 
 # Redis 连接配置
 redis:

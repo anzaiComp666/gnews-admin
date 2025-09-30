@@ -5,10 +5,10 @@ export interface IBreadcrumbItem {
     pathname: string
 }
 
-export const makeBreadcrumbMeta = (item: IBreadcrumbItem) => {
+export const makeBreadcrumbMeta = (items: IBreadcrumbItem[]) => {
     const uuid = randomUUID().toString()
     const key = `breadcrumb-${uuid}`
     return {
-        [key]: JSON.stringify(item)
+        [key]: JSON.stringify(items)
     }
 }

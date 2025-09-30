@@ -3,13 +3,15 @@ import { makeBreadcrumbMeta } from "@/pro-components/pro-sidebar/breadcrumbs/uti
 import { PropsWithChildren } from "react";
 
 export async function generateMetadata(props: {
-    params: Promise<{ labelId: string[], appId: string }>
+    params: Promise<{
+        appId: string
+    }>
 }) {
     const params = await props.params
     return {
         title: "标签管理",
         other: {
-            ...makeBreadcrumbMeta({ title: "标签管理", pathname: `/app/${params.appId}/labels` }),
+            ...makeBreadcrumbMeta([{ title: "标签管理", pathname: `/app/${params.appId}/labels` }]),
         },
     }
 }

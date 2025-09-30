@@ -1,27 +1,36 @@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb"
-import { usePathname } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { IBreadcrumbItem } from "./util"
 
 
 export const Breadcrumbs = () => {
     const [breadcrumbs, setBreadcrumbs] = useState<IBreadcrumbItem[]>([])
-    const pathname = usePathname()
-    useEffect(() => {
-        const items: IBreadcrumbItem[] = []
+
+
+    const readBreadcrumbs = () => {
+        let items: IBreadcrumbItem[] = []
         const nodes = document.querySelectorAll("meta")
         for (const item of nodes) {
             const name = item.getAttribute("name")
             if (name && name.startsWith("breadcrumb-")) {
                 const content = item.getAttribute("content")
                 if (content) {
-                    items.push(JSON.parse(content))
+                    const parsed = JSON.parse(content) as IBreadcrumbItem[]
+                    items = items.concat(parsed)
                 }
             }
         }
 
         setBreadcrumbs(items)
-    }, [pathname])
+    }
+
+    useEffect(() => {
+        const observer = new MutationObserver(() => {
+            readBreadcrumbs()
+        })
+        observer.observe(document.head, { childList: true, subtree: true })
+        return () => observer.disconnect()
+    }, [])
 
 
     const children: React.ReactNode[] = []
