@@ -10,6 +10,6 @@ export default async function Page(props: Props) {
     const params = await props.params
     const labelId = params.labelId
     return (
-        <LabelsPage labelId={labelId[labelId.length - 1]} />
+        <LabelsPage parentId={labelId[labelId.length - 1]} />
     )
 }

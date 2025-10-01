@@ -1,5 +1,5 @@
 import { Table, TableBody, TableHeader, TableRow } from "@/components/ui/table"
-import { ColumnDef, ColumnFiltersState, getCoreRowModel, PaginationState, SortingState, useReactTable } from "@tanstack/react-table"
+import { ColumnDef, ColumnFiltersState, getCoreRowModel, PaginationState, RowSelectionState, SortingState, useReactTable } from "@tanstack/react-table"
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react"
 import { ProSpinner } from "../pro-spinner"
 import { ProTableHeaderRender } from "./header-render"
@@ -10,6 +10,7 @@ import { ProTableRow } from "./row"
 
 export interface ProTableRef {
     refresh: () => Promise<void>
+    getSelectedRows: () => Record<string, boolean>
 }
 
 interface Props<T> {
@@ -49,7 +50,7 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
     // table state
     const [sorting, setSorting] = useState<SortingState>(props.defaultSorting ?? [])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-    const [rowSelection, setRowSelection] = useState({})
+    const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: 0,
@@ -125,13 +126,14 @@ export const ProTable = forwardRef(<T,>(props: Props<T>, ref: React.Ref<ProTable
     // - 暴露给父组件的方法
     useImperativeHandle(ref, () => {
         return {
-            refresh: requestData
+            refresh: requestData,
+            getSelectedRows: () => rowSelection,
         }
     }, [requestData])
 
     return (
         <ProTableContext.Provider value={{
-            refresh: requestData,
+            refresh: requestData
         }}>
             <ProSpinner isLoading={isLoading} className="w-full h-full overflow-hidden">
                 <div className="h-full flex flex-col p-2.5 gap-2.5">

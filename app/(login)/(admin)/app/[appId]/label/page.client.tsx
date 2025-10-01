@@ -12,11 +12,11 @@ import { ChildrenCell } from "./cell/children-count"
 import { LabelUpsertDialog } from "./dialogs/upsert"
 import { Button } from "@/components/ui/button"
 import { useRef } from "react"
-import { AddSubLabelDialog } from "./dialogs/addsub"
+import { LabelChildrenAddDialog } from "./dialogs/children-add"
 
 
 interface Props {
-    labelId?: string
+    parentId?: string
 }
 
 export const LabelsPage = (props: Props) => {
@@ -108,7 +108,7 @@ export const LabelsPage = (props: Props) => {
             header: "操作",
             enableSorting: false,
             enableColumnFilter: false,
-            cell: info => <ActionsCell info={info} />
+            cell: info => <ActionsCell parentId={props.parentId} info={info} />
         }
     ]
 
@@ -122,7 +122,7 @@ export const LabelsPage = (props: Props) => {
     }) => {
         const { data, total } = await labelList(appContext.appId, {
             ...params,
-            labelId: props.labelId,
+            parentId: props.parentId,
         })
         return {
             data: data,
@@ -139,11 +139,11 @@ export const LabelsPage = (props: Props) => {
                 <Button>添加</Button>
             </LabelUpsertDialog>
 
-            <AddSubLabelDialog>
-                <Button className="aria-hidden:hidden" aria-hidden={props.labelId == null}>
+            <LabelChildrenAddDialog parentId={props.parentId ?? ""}>
+                <Button className="aria-hidden:hidden" aria-hidden={props.parentId == null}>
                     添加子标签
                 </Button>
-            </AddSubLabelDialog>
+            </LabelChildrenAddDialog>
 
             <Button onClick={() => tableRef?.current?.refresh()} variant="outline">
                 刷新

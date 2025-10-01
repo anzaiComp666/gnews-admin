@@ -58,8 +58,28 @@ export async function labelList(appId: GappId, data: LabelListSchemaType) {
             .take(params.pageSize)
             .orderBy(order)
 
-        if (params.labelId) {
-            qb.innerJoin(GappVideoLabelParentEntity, "gvlp", "gvl.labelId = gvlp.labelId AND gvlp.parentId = :parentId", { parentId: params.labelId })
+        if (params.parentId) {
+            const parentLabel = await mgr.findOneBy(GappVideoLabelEntity, {
+                appId: appId,
+                labelId: params.parentId
+            })
+
+            if (!parentLabel) {
+                throw new Error("父标签不存在")
+            }
+
+            if (params.isAddMode) {
+                // 添加子标签模式，排除已是子标签的
+                qb.leftJoin(GappVideoLabelParentEntity, "gvlp", "gvl.labelId = gvlp.labelId AND gvlp.parentId = :parentId", { parentId: params.parentId })
+                    .andWhere("gvlp.id IS NULL")
+                    .andWhere("gvl.groupType = :groupType", { groupType: parentLabel.groupType })
+            } else {
+                // 正常模式，筛选出已有的子标签
+                qb.innerJoin(GappVideoLabelParentEntity, "gvlp", "gvl.labelId = gvlp.labelId AND gvlp.parentId = :parentId", { parentId: params.parentId })
+            }
+
+            // 排除自己
+            qb.andWhere("gvl.labelId != :labelId", { labelId: params.parentId })
         }
 
         return qb.getManyAndCount()

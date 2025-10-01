@@ -2,13 +2,21 @@ import { GappVideoLabelEntity, GappVideoLabelGroupType, GappVideoLabelGroupTypeT
 import { enumToOptions } from "@/lib/enumutil"
 import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef, ColumnFiltersState, SortingState } from "@tanstack/react-table"
-import { ChildrenCell } from "../../cell/children-count"
 import { useAppContext } from "../../../context"
 import { labelList } from "@/actions/video/label/list"
-import { ProTable } from "@/pro-components/pro-table"
-import { Button } from "@/components/ui/button"
+import { ProTable, ProTableRef } from "@/pro-components/pro-table"
+import { useRef, useTransition } from "react"
+import { labelChildrenAdd } from "@/actions/video/label/children-add"
+import { ProButton } from "@/pro-components/pro-button"
+import { ToastUtil } from "@/lib/toastutil"
 
-export const AddSubLabelDialogContent = () => {
+
+interface Props {
+    parentId: string,
+    onConfirm?: () => void
+}
+
+export const LabelChildrenAddDialogContent = (props: Props) => {
     const columns: ColumnDef<GappVideoLabelEntity>[] = [
         {
             id: "selection",
@@ -97,7 +105,6 @@ export const AddSubLabelDialogContent = () => {
     ]
 
     const appContext = useAppContext()
-
     const onRequest = async (params: {
         page: number,
         pageSize: number
@@ -113,10 +120,11 @@ export const AddSubLabelDialogContent = () => {
                 value: "no"
             }
         ]
-        console.log(params)
         const { data, total } = await labelList(appContext.appId, {
             ...params,
-            columnFilters: columnFilters
+            columnFilters: columnFilters,
+            parentId: props.parentId,
+            isAddMode: true
         })
         return {
             data: data,
@@ -125,33 +133,39 @@ export const AddSubLabelDialogContent = () => {
     }
 
 
-    // const tableRef = useRef<ProTableRef>(null)
+    const tableRef = useRef<ProTableRef>(null)
+    const app = useAppContext()
+    const [isPending, startTransition] = useTransition()
 
-    // const header = (
-    //     <div className="flex justify-end gap-2">
-    //         <LabelUpsertDialog>
-    //             <Button>添加</Button>
-    //         </LabelUpsertDialog>
+    const onConfirm = async () => {
+        const selectedRows = tableRef?.current?.getSelectedRows() ?? {}
+        const labelIds: string[] = []
+        for (const key of Object.keys(selectedRows)) {
+            if (selectedRows[key]) {
+                labelIds.push(key)
+            }
+        }
 
-    //         <AddSubLabelDialog>
-    //             <Button className="aria-hidden:hidden" aria-hidden={props.labelId == null}>
-    //                 添加子标签
-    //             </Button>
-    //         </AddSubLabelDialog>
+        startTransition(async () => {
+            try {
+                await labelChildrenAdd(app.appId, {
+                    parentId: props.parentId,
+                    childrenLabelIds: labelIds
+                })
+                props.onConfirm?.()
+            } catch (error) {
+                ToastUtil.error(error)
+            }
+        })
 
-    //         <Button onClick={() => tableRef?.current?.refresh()} variant="outline">
-    //             刷新
-    //         </Button>
-    //     </div>
-    // )
+    }
 
     return (
         <div className="overflow-hidden flex flex-col">
             <div className="flex-1 overflow-hidden">
                 <ProTable<GappVideoLabelEntity>
-                    // ref={tableRef}
-                    // header={header}
-                    rowKey="id"
+                    ref={tableRef}
+                    rowKey="labelId"
                     columns={columns}
                     defaultSorting={[
                         { id: 'orderNo', desc: true },
@@ -162,7 +176,7 @@ export const AddSubLabelDialogContent = () => {
                 />
             </div>
             <div className="flex justify-center gap-2 p-4">
-                <Button>确定添加</Button>
+                <ProButton onClick={onConfirm} isLoading={isPending} disabled={isPending}>确定添加</ProButton>
             </div>
         </div>
     )
