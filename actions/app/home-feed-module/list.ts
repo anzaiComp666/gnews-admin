@@ -1,14 +1,18 @@
 "use server"
 
 import { dataSources } from "@/lib/dao";
-import { instanceToPlain } from "class-transformer";
 import { TableListSchema, TableListSchemaType } from "@/schema/table-list.schema";
 import { Between, FindOptionsWhere } from "typeorm";
 import { isDateRange } from "react-day-picker";
 import { authVerify } from "../../auth/verify";
 import { GappId } from "@/lib/dao/video/gapp_video.entity";
 import { HomeFeedModuleEntity, IHomeFeedModuleEntity } from "@/lib/dao/app/home-feed-module";
+import { HomeFeedModuleVideoEntity } from "@/lib/dao/app/home-feed-module-video";
 
+
+export type IHomeFeedModuleEntityWithCount = IHomeFeedModuleEntity & {
+    videoCount: number
+}
 
 export async function homeFeedModuleList(appId: GappId, data: TableListSchemaType) {
     await authVerify()
@@ -40,15 +44,31 @@ export async function homeFeedModuleList(appId: GappId, data: TableListSchemaTyp
 
 
     const [entities, total] = await dataSources.app[appId].withDataSource(async mgr => {
-        return await mgr.findAndCount(HomeFeedModuleEntity, {
-            where: where,
-            skip: (params.page - 1) * params.pageSize,
-            take: params.pageSize,
-            order: order,
-        })
+        // 先查总数
+        const total = await mgr.createQueryBuilder(HomeFeedModuleEntity, "hfm")
+            .where(where)
+            .getCount()
+
+        // 再查数据和关联视频数
+        const entities = await mgr.createQueryBuilder(HomeFeedModuleEntity, "hfm")
+            .select("hfm.*")
+            .addSelect((subQuery) => {
+                // 关联视频数的子查询
+                return subQuery
+                    .select("count(*)", "count")
+                    .from(HomeFeedModuleVideoEntity, "hfmv")
+                    .where("hfmv.moduleId = hfm.id")
+            }, "videoCount")
+            .where(where)
+            .skip((params.page - 1) * params.pageSize)
+            .take(params.pageSize)
+            .orderBy(order)
+            .getRawMany<IHomeFeedModuleEntityWithCount>()
+        return [entities, total]
     })
+
     return {
-        data: instanceToPlain(entities) as IHomeFeedModuleEntity[],
+        data: entities,
         total: total
     };
 }

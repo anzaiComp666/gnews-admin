@@ -1,20 +1,21 @@
 "use client"
 
 import { TableDateCellRender } from "@/components/table-cell-render/date"
-import { HomeFeedModuleStatus, HomeFeedModuleStatusTextMap, IHomeFeedModuleEntity } from "@/lib/dao/app/home-feed-module"
+import { HomeFeedModuleStatus, HomeFeedModuleStatusTextMap } from "@/lib/dao/app/home-feed-module"
 import { JumpTypeOptions } from "@/lib/types/jump-type"
 import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAppContext } from "../context"
 import { ProTable, ProTableRef } from "@/pro-components/pro-table"
 import { useRef } from "react"
-import { homeFeedModuleList } from "@/actions/app/home-feed-module/list"
+import { homeFeedModuleList, IHomeFeedModuleEntityWithCount } from "@/actions/app/home-feed-module/list"
 import { ActionsCell } from "./cell/acions"
 import { HomeFeedModuleUpsertDialog } from "./upsert-dialog"
 import { Button } from "@/components/ui/button"
+import { VideoCountCell } from "./cell/video-count"
 
 export default () => {
-    const columns: ColumnDef<IHomeFeedModuleEntity>[] = [
+    const columns: ColumnDef<IHomeFeedModuleEntityWithCount>[] = [
         {
             header: "ID",
             accessorKey: "id",
@@ -46,7 +47,6 @@ export default () => {
         {
             header: "排序",
             accessorKey: "orderNo",
-            enableSorting: false,
             enableColumnFilter: false,
         },
         {
@@ -67,6 +67,12 @@ export default () => {
             enableColumnFilter: false,
         },
         {
+            header: "关联视频数",
+            accessorKey: "videoCount",
+            enableColumnFilter: false,
+            cell: info => <VideoCountCell info={info} />
+        },
+        {
             header: "创建时间",
             accessorKey: "createdAt",
             cell: info => <TableDateCellRender value={info.getValue()} />,
@@ -79,7 +85,6 @@ export default () => {
         {
             header: "更新时间",
             accessorKey: "updatedAt",
-            enableSorting: false,
             enableColumnFilter: false,
             cell: info => <TableDateCellRender value={info.getValue()} />
         },
@@ -118,7 +123,7 @@ export default () => {
 
 
 
-    return <ProTable<IHomeFeedModuleEntity>
+    return <ProTable<IHomeFeedModuleEntityWithCount>
         ref={tableRef}
         rowKey="id"
         header={header}

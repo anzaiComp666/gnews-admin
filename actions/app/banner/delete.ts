@@ -12,6 +12,6 @@ export const bannerDelete = async (appId: GappId, data: BannerDeleteSchemaType) 
 
     const params = BannerDeleteSchema.parse(data)
     await dataSources.app[appId].withDataSource(async manager => {
-        await manager.delete(BannerEntity, { id: params.id })
+        await manager.softDelete(BannerEntity, { id: params.id })
     })
 }

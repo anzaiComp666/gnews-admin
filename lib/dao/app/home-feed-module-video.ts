@@ -6,6 +6,12 @@ export enum HomeFeedModuleVideoStatus {
   inactive = 'inactive',
 }
 
+export const HomeFeedModuleVideoStatusTextMap: Record<HomeFeedModuleVideoStatus, string> = {
+  [HomeFeedModuleVideoStatus.active]: '显示',
+  [HomeFeedModuleVideoStatus.inactive]: '隐藏',
+};
+
+
 @Entity('home_feed_module_video')
 export class HomeFeedModuleVideoEntity extends BaseEntity {
 
