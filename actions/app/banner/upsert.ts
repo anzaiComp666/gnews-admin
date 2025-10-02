@@ -2,12 +2,12 @@
 
 import { dataSources } from "@/lib/dao"
 import { BannerEntity } from "@/lib/dao/app/banner"
-import { BannerUpsertParams, BannerUpsertSchema } from "./upsert-schema"
+import { BannerUpsertSchemaType, BannerUpsertSchema } from "./upsert-schema"
 import { authVerify } from "@/actions/auth/verify"
 import { GappId } from "@/lib/dao/video/gapp_video.entity"
 
 
-export const bannerUpsert = async (appId: GappId, data: BannerUpsertParams) => {
+export const bannerUpsert = async (appId: GappId, data: BannerUpsertSchemaType) => {
     await authVerify()
 
     const params = BannerUpsertSchema.parse(data)

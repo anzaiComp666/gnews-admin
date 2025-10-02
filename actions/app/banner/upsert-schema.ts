@@ -13,4 +13,4 @@ export const BannerUpsertSchema = z.object({
     jumpData: z.string().optional(),
 })
 
-export type BannerUpsertParams = z.infer<typeof BannerUpsertSchema>
+export type BannerUpsertSchemaType = z.infer<typeof BannerUpsertSchema>

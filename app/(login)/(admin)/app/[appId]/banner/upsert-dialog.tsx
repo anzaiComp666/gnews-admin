@@ -1,5 +1,5 @@
 import { bannerUpsert } from "@/actions/app/banner/upsert"
-import { BannerUpsertParams, BannerUpsertSchema } from "@/actions/app/banner/upsert-schema"
+import { BannerUpsertSchemaType, BannerUpsertSchema } from "@/actions/app/banner/upsert-schema"
 import { BannerPosition, BannerStatus, IBannerEntity } from "@/lib/dao/app/banner"
 import { JumpType, JumpTypeOptions } from "@/lib/types/jump-type"
 import { ProFormDialog } from "@/pro-components/pro-form-dialog"
@@ -15,12 +15,12 @@ export const BannerUpsertDialog = (props: Props) => {
     const appContext = useAppContext()
 
     const onSubmit = async (data: Record<string, any>) => {
-        await bannerUpsert(appContext.appId, data as BannerUpsertParams)
+        await bannerUpsert(appContext.appId, data as BannerUpsertSchemaType)
         await table.refresh()
     }
 
     return (
-        <ProFormDialog<BannerUpsertParams>
+        <ProFormDialog<BannerUpsertSchemaType>
             trigger={props.children}
             header={props.entity ? "编辑轮播图" : "添加轮播图"}
             onSubmit={onSubmit}
