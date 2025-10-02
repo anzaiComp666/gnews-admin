@@ -16,6 +16,10 @@ export default (props: PropsWithChildren) => {
                     pathname: "/app/1/banner",
                 },
                 {
+                    title: "首页模块",
+                    pathname: "/app/1/home-modules",
+                },
+                {
                     title: "标签管理",
                     pathname: "/app/1/label",
                 },

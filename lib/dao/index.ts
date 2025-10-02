@@ -6,6 +6,7 @@ import { GappId, GappVideoEntity } from './video/gapp_video.entity';
 import { GappVideoLabelEntity } from './video/gapp_video_label.entity';
 import { GappVideoLabelRelationEntity } from './video/gapp_video_label_relation.entity';
 import { GappVideoLabelParentEntity } from './video/gapp_video_label_parent.entity';
+import { HomeFeedModuleEntity } from './app/home-feed-module';
 
 const entities: { [key: string]: any[] } = {
     admin: [
@@ -13,6 +14,7 @@ const entities: { [key: string]: any[] } = {
     ],
     app_1: [
         BannerEntity,
+        HomeFeedModuleEntity,
     ],
     video: [
         GappVideoEntity,
