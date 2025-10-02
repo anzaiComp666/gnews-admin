@@ -1,13 +1,20 @@
 "use client"
 
 import { TableDateCellRender } from "@/components/table-cell-render/date"
-import { HomeFeedModuleVideoStatus, HomeFeedModuleVideoStatusTextMap, IHomeFeedModuleVideoEntity } from "@/lib/dao/app/home-feed-module-video"
+import {
+    HomeFeedModuleVideoStatus,
+    HomeFeedModuleVideoStatusTextMap,
+    IHomeFeedModuleVideoEntity
+} from "@/lib/dao/app/home-feed-module-video"
 import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAppContext } from "../../../context"
 import { homeFeedModuleVideoList } from "@/actions/app/home-feed-module-video/list"
 import { ProTable, ProTableRef } from "@/pro-components/pro-table"
 import { useRef } from "react"
+import { Button } from "@/components/ui/button"
+import { ActionsCell } from "./cell/acions"
+import { HomeFeedModuleVideoUpsertDialog } from "./dialog/upsert-dialog"
 
 interface Props {
     moduleId: number
@@ -64,6 +71,12 @@ export const HomeFeedModuleVideoPage = (props: Props) => {
             enableColumnFilter: false,
             cell: info => <TableDateCellRender value={info.getValue()} />
         },
+        {
+            header: "操作",
+            enableColumnFilter: false,
+            enableSorting: false,
+            cell: info => <ActionsCell info={info} />
+        }
     ]
 
     const appContext = useAppContext()
@@ -85,21 +98,21 @@ export const HomeFeedModuleVideoPage = (props: Props) => {
     }
 
     const tableRef = useRef<ProTableRef>(null)
-    // const header = (
-    //     <div className="flex justify-end gap-2">
-    //         <HomeFeedModuleUpsertDialog>
-    //             <Button>添加</Button>
-    //         </HomeFeedModuleUpsertDialog>
-    //         <Button onClick={() => tableRef?.current?.refresh()} variant="outline">刷新</Button>
-    //     </div>
-    // )
+    const header = (
+        <div className="flex justify-end gap-2">
+            <HomeFeedModuleVideoUpsertDialog moduleId={props.moduleId}>
+                <Button>添加</Button>
+            </HomeFeedModuleVideoUpsertDialog>
+            <Button onClick={() => tableRef?.current?.refresh()} variant="outline">刷新</Button>
+        </div>
+    )
 
 
 
     return <ProTable<IHomeFeedModuleVideoEntity>
         ref={tableRef}
         rowKey="id"
-        // header={header}
+        header={header}
         columns={columns}
         defaultSorting={[{ id: 'orderNo', desc: true }]}
         onRequest={onRequest}
