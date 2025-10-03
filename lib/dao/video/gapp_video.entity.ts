@@ -99,6 +99,3 @@ export class GappVideoEntity extends BaseEntity {
   })
   fetchLinkStatus: GappVideoFetchStatus;
 }
-
-
-export type IGappVideoEntity = InstanceType<typeof GappVideoEntity>;

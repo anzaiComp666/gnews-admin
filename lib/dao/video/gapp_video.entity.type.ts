@@ -1,3 +1,13 @@
-import { GappVideoEntity } from "./gapp_video.entity";
-
-export type IGappVideoEntity = Omit<GappVideoEntity, "rawVideoLink">;
+export interface IGappVideoEntity {
+    id: number;
+    videoId: string;
+    title: string;
+    durationSec: number;
+    lookNum: number;
+    likeNum: number;
+    gold: boolean;
+    labels: {
+        labelId: string;
+        labelName: string;
+    }[];
+};

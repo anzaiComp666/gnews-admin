@@ -1,9 +1,9 @@
 import { CellContext } from "@tanstack/react-table";
-import { GappVideoEntity } from "@/lib/dao/video/gapp_video.entity";
+import { IGappVideoEntity } from "@/lib/dao/video/gapp_video.entity.type";
 
 
 interface Props {
-    info: CellContext<GappVideoEntity, unknown>
+    info: CellContext<IGappVideoEntity, unknown>
 }
 
 function formatDuration(sec: number) {

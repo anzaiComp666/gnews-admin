@@ -1,6 +1,6 @@
 "use client"
 
-import { IGappVideoEntity } from "@/lib/dao/video/gapp_video.entity"
+
 import { makeFilterVariant } from "@/pro-components/pro-table/filter-form"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAppContext } from "../context"
@@ -9,6 +9,8 @@ import { useRef } from "react"
 import { ProTable, ProTableRef } from "@/pro-components/pro-table"
 import { DurationCell } from "./cell/duration"
 import { Button } from "@/components/ui/button"
+import { IGappVideoEntity } from "@/lib/dao/video/gapp_video.entity.type"
+import { LabelsCell } from "./cell/labels"
 
 export default () => {
     const columns: ColumnDef<IGappVideoEntity>[] = [
@@ -41,6 +43,13 @@ export default () => {
             accessorKey: "durationSec",
             cell: info => <DurationCell info={info} />,
             enableSorting: true,
+            enableColumnFilter: false,
+        },
+        {
+            header: "标签",
+            accessorKey: "labels",
+            cell: info => <LabelsCell info={info} />,
+            enableSorting: false,
             enableColumnFilter: false,
         },
         {
