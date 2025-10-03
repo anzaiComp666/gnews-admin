@@ -8,12 +8,14 @@ import { GappVideoLabelRelationEntity } from './video/gapp_video_label_relation.
 import { GappVideoLabelParentEntity } from './video/gapp_video_label_parent.entity';
 import { HomeFeedModuleEntity } from './app/home-feed-module';
 import { HomeFeedModuleVideoEntity } from './app/home-feed-module-video';
+import { AppConfigEntity } from './app/app-config';
 
 const entities: { [key: string]: any[] } = {
     admin: [
         AdminUserEntity,
     ],
     app_1: [
+        AppConfigEntity,
         BannerEntity,
         HomeFeedModuleEntity,
         HomeFeedModuleVideoEntity,

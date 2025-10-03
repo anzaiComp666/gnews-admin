@@ -12,6 +12,10 @@ export default (props: PropsWithChildren) => {
             title: "GNews",
             items: [
                 {
+                    title: "应用配置",
+                    pathname: "/app/1/config",
+                },
+                {
                     title: "轮播图管理",
                     pathname: "/app/1/banner",
                 },

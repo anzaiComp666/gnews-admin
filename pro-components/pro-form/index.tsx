@@ -1,18 +1,20 @@
 import { ControllerRenderProps, useForm, UseFormReturn } from "react-hook-form";
 import { ProFormFieldInput, ProFormFieldInputProps } from "./fields/input"
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import React from "react";
 import { ProFormCommonProps } from "./fields/common";
 import { ProFormFieldSelect, ProFormFieldSelectProps } from "./fields/select";
 import { ProFormFieldNumberInput, ProFormFieldNumberInputProps } from "./fields/number-input";
 import { ProFormFieldCheckbox, ProFormFieldCheckboxProps } from "./fields/checkbox";
+import { ProFormFieldTextarea, ProFormFieldTextareaProps } from "./fields/textarea";
 
 export type ProFormFieldProps = ProFormCommonProps & (
     ProFormFieldInputProps |
     ProFormFieldNumberInputProps |
     ProFormFieldSelectProps |
-    ProFormFieldCheckboxProps
+    ProFormFieldCheckboxProps |
+    ProFormFieldTextareaProps
 )
 
 export interface ProFormProps<FormFields> {
@@ -118,6 +120,9 @@ const ProFormFieldRender = (props: ProFormFieldProps & { name: string, form: Use
 
             case 'checkbox':
                 return <ProFormFieldCheckbox {...restProps} field={field} />
+
+            case 'textarea':
+                return <ProFormFieldTextarea {...restProps} field={field} />
         }
     }
 
@@ -131,7 +136,11 @@ const ProFormFieldRender = (props: ProFormFieldProps & { name: string, form: Use
                     <FormLabel>{props.label}</FormLabel>
                     <FormControl>
                         {renderField(field)}
+
                     </FormControl>
+                    <FormDescription>
+                        {props.description}
+                    </FormDescription>
                     <FormMessage />
                 </FormItem>
             )}

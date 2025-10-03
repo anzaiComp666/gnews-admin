@@ -6,6 +6,8 @@ export interface ProFormFieldNumberInputProps {
     defaultValue: number
     readonly?: boolean
     placeholder?: string
+    hiddenStepper?: boolean,
+
 }
 
 export const ProFormFieldNumberInput = (props: ProFormFieldNumberInputProps & { field: ControllerRenderProps }) => {
@@ -18,6 +20,7 @@ export const ProFormFieldNumberInput = (props: ProFormFieldNumberInputProps & { 
             }}
             readOnly={props.readonly}
             placeholder={props.placeholder}
+            hiddenStepper={props.hiddenStepper}
         />
     )
 }

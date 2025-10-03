@@ -1,6 +1,9 @@
 import { toast } from "sonner"
 
 export const ToastUtil = {
+    success: (message: string) => {
+        toast.success(message)
+    },
     error: (message: any) => {
         if (typeof message === 'string') {
             toast.error(message)
