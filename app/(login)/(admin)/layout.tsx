@@ -31,6 +31,11 @@ export default (props: PropsWithChildren) => {
                     title: "标签管理",
                     pathname: "/app/1/label",
                 },
+                {
+                    title: "视频管理",
+                    pathname: "/app/1/video",
+                },
+
             ]
         }
     ]
