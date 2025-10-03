@@ -24,6 +24,10 @@ export default (props: PropsWithChildren) => {
                     pathname: "/app/1/home-modules",
                 },
                 {
+                    title: "通知管理",
+                    pathname: "/app/1/notification",
+                },
+                {
                     title: "标签管理",
                     pathname: "/app/1/label",
                 },

@@ -9,6 +9,7 @@ import { GappVideoLabelParentEntity } from './video/gapp_video_label_parent.enti
 import { HomeFeedModuleEntity } from './app/home-feed-module';
 import { HomeFeedModuleVideoEntity } from './app/home-feed-module-video';
 import { AppConfigEntity } from './app/app-config';
+import { NotificationEntity } from './app/notification';
 
 const entities: { [key: string]: any[] } = {
     admin: [
@@ -19,6 +20,7 @@ const entities: { [key: string]: any[] } = {
         BannerEntity,
         HomeFeedModuleEntity,
         HomeFeedModuleVideoEntity,
+        NotificationEntity,
     ],
     video: [
         GappVideoEntity,
