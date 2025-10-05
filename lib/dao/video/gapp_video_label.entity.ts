@@ -9,22 +9,12 @@ export enum GappVideoLabelGroupType {
   topic = 'topic', // 主题
 }
 
-export const GappVideoLabelGroupTypeTextMap: Record<GappVideoLabelGroupType, string> = {
-  [GappVideoLabelGroupType.region]: '地区',
-  [GappVideoLabelGroupType.topic]: '主题',
-};
-
 
 // 标签状态
 export enum GappVideoLabelStatus {
   active = 'active', // 启用
   inactive = 'inactive', // 禁用
 }
-
-export const GappVideoLabelStatusTextMap: Record<GappVideoLabelStatus, string> = {
-  [GappVideoLabelStatus.active]: '启用',
-  [GappVideoLabelStatus.inactive]: '禁用',
-};
 
 
 @Entity('gapp_video_label')
@@ -73,5 +63,3 @@ export class GappVideoLabelEntity extends BaseEntity {
 }
 
 
-
-export type IGappVideoLabelEntity = InstanceType<typeof GappVideoLabelEntity>;
